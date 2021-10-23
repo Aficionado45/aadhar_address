@@ -1,4 +1,5 @@
 import 'package:aadhar_address/screens/op_otp.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:aadhar_address/screens/op_otp.dart';
 
@@ -12,6 +13,17 @@ class opLogin extends StatefulWidget {
 class _opLoginState extends State<opLogin> {
   @override
   String op_aadhar;
+
+  Future<bool> checkIfDocExists(String docId) async {
+    try {
+      var collectionRef = FirebaseFirestore.instance.collection('operator');
+
+      var doc = await collectionRef.doc(docId).get();
+      return doc.exists;
+    } catch (e) {
+      throw e;
+    }
+  }
 
   Widget build(BuildContext context) {
     return new WillPopScope(
@@ -40,7 +52,6 @@ class _opLoginState extends State<opLogin> {
                       return null;
                     else {
                       op_aadhar = value;
-                      print(op_aadhar);
                     }
                   },
                   decoration: InputDecoration(
@@ -59,8 +70,9 @@ class _opLoginState extends State<opLogin> {
                 width: MediaQuery.of(context).size.width / 4,
                 height: 40,
                 child: FlatButton(
-                  onPressed: () {
-                    if (op_aadhar != null && op_aadhar.length == 12) {
+                  onPressed: () async {
+                    bool exists = await checkIfDocExists(op_aadhar);
+                    if (op_aadhar != null && op_aadhar.length == 12 && exists) {
                       print("pressed");
                       Navigator.pushNamed(context, 'opotp');
                     }
