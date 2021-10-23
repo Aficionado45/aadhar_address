@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'screens/welcome.dart';
+import 'screens/op_login.dart';
+import 'screens/op_otp.dart';
+import 'screens/scan.dart';
+import 'screens/user_login.dart';
+import 'screens/user_otp.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +28,11 @@ class _MyAppState extends State<MyApp> {
       initialRoute: 'welcome',
       routes: {
         'welcome': (context) => WelcomeScreen(),
+        'oplogin': (context) => opLogin(),
+        'opotp': (context) => opOTP(),
+        'userotp': (context) => userOTP(),
+        'userlogin': (context) => userLogin(),
+        'scan': (context) => scanDoc(),
       },
     );
   }
