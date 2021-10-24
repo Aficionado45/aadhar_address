@@ -63,3 +63,8 @@ class _opOTPState extends State<opOTP> {
     );
   }
 }
+
+
+//TODO: Improve UI
+//Error for wrong otp and resend option
+////API integration

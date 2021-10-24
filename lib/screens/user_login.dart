@@ -13,7 +13,6 @@ String user_aadhar;
 
 class _userLoginState extends State<userLogin> {
   @override
-
   Future<int> checkIfDocExists(String docId) async {
     try {
       var collectionRef = FirebaseFirestore.instance.collection('ongoing');
@@ -109,3 +108,8 @@ class _userLoginState extends State<userLogin> {
     );
   }
 }
+
+
+//TODO: Improve UI
+//Error for wrong input format less than 12 digits 
+//Auth API integration

@@ -1,3 +1,5 @@
+import 'package:aadhar_address/screens/biometric.dart';
+import 'package:aadhar_address/screens/recipt.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'screens/welcome.dart';
@@ -41,6 +43,8 @@ class _MyAppState extends State<MyApp> {
         'capture': (context) => capture(),
         'form': (context) => editForm(),
         'confirmaddress': (context) => cnfrmAddress(),
+        'recipt': (context) => recipt(),
+        'biometric': (context) => biometric(),
       },
     );
   }

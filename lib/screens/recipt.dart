@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class confirm extends StatefulWidget {
-  const confirm();
+class recipt extends StatefulWidget {
+  const recipt();
 
   @override
-  _confirmState createState() => _confirmState();
+  _reciptState createState() => _reciptState();
 }
 
-class _confirmState extends State<confirm> {
+class _reciptState extends State<recipt> {
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
@@ -18,7 +18,7 @@ class _confirmState extends State<confirm> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Final confirmation Screen with all the details"),
+                Text("Final generated Recipt of the update"),
                 SizedBox(
                   height: 20,
                 ),
@@ -35,11 +35,10 @@ class _confirmState extends State<confirm> {
                       height: 40,
                       child: FlatButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, 'scan');
-                          //Delete the current document and start a new one at step 1
+                          print("Shared");
                         },
                         child: Text(
-                          "Reset",
+                          "Share",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 15,
@@ -60,10 +59,10 @@ class _confirmState extends State<confirm> {
                       height: 40,
                       child: FlatButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, 'biometric');
+                          Navigator.pushNamed(context, 'oplogin');
                         },
                         child: Text(
-                          "Confirm",
+                          "Finish",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 15,
@@ -72,7 +71,7 @@ class _confirmState extends State<confirm> {
                       ),
                     ),
                   ],
-                ),
+                )
               ],
             ),
           ),
@@ -82,6 +81,6 @@ class _confirmState extends State<confirm> {
   }
 }
 
-
 //TODO: Improve UI
-//On reset line 39 and on confirm update the ongoing doc step and timestamp.
+//Implement share and feedback option
+//Clear all existing variables

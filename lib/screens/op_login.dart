@@ -17,7 +17,6 @@ class _opLoginState extends State<opLogin> {
   Future<bool> checkIfDocExists(String docId) async {
     try {
       var collectionRef = FirebaseFirestore.instance.collection('operator');
-
       var doc = await collectionRef.doc(docId).get();
       return doc.exists;
     } catch (e) {
@@ -73,7 +72,6 @@ class _opLoginState extends State<opLogin> {
                   onPressed: () async {
                     bool exists = await checkIfDocExists(op_aadhar);
                     if (op_aadhar != null && op_aadhar.length == 12 && exists) {
-                      print("pressed");
                       Navigator.pushNamed(context, 'opotp');
                     }
                   },
@@ -93,3 +91,8 @@ class _opLoginState extends State<opLogin> {
     );
   }
 }
+
+
+//TODO: Improve UI 
+//add error for wrong inputs(Less than 12 digits / wrong operator aadhar no.)
+//Auth API integeation

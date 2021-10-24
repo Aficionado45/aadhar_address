@@ -1,29 +1,24 @@
 import 'package:flutter/material.dart';
 
-class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen();
+class biometric extends StatefulWidget {
+  const biometric();
 
   @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
+  _biometricState createState() => _biometricState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _biometricState extends State<biometric> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Container(
-          child: Center(
+    return new WillPopScope(
+      onWillPop: () async => false,
+      child: new Scaffold(
+        body: Center(
+          child: Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Center(
-                  child: Text('Aadhar Address App',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      )),
-                ),
+                Text("User and operator Biometric Verification"),
                 SizedBox(
                   height: 20,
                 ),
@@ -33,14 +28,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
                   alignment: FractionalOffset.center,
-                  width: 110,
+                  width: MediaQuery.of(context).size.width / 4,
                   height: 40,
                   child: FlatButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, 'oplogin');
+                      Navigator.pushNamed(context, 'recipt');
                     },
                     child: Text(
-                      "Get Started",
+                      "Verify",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 15,
@@ -57,5 +52,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 }
 
-
-//TODO: Improve UI
+//API Integration
+//Improve UI
+//On failure error messages and on success shift the document from ongoing to completed

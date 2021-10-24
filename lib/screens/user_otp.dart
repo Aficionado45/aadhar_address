@@ -81,3 +81,8 @@ class _userOTPState extends State<userOTP> {
     );
   }
 }
+
+
+//TODO: Improve UI
+//Wrong OTP and resend
+//Auth API integration

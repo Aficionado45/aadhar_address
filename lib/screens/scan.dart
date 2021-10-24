@@ -53,3 +53,7 @@ class _scanDocState extends State<scanDoc> {
     );
   }
 }
+
+
+//TODO: Impprove UI
+//OCR Integration

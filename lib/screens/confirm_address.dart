@@ -21,27 +21,56 @@ class _cnfrmAddressState extends State<cnfrmAddress> {
               SizedBox(
                 height: 20,
               ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Color(0xFF143B40),
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                alignment: FractionalOffset.center,
-                width: MediaQuery.of(context).size.width / 2.5,
-                height: 40,
-                child: FlatButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'form');
-                  },
-                  child: Text(
-                    "Confirm Address",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFF143B40),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    alignment: FractionalOffset.center,
+                    width: MediaQuery.of(context).size.width / 2.5,
+                    height: 40,
+                    child: FlatButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, 'scan');
+                      },
+                      child: Text(
+                        "Scan Again",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              )
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFF143B40),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    alignment: FractionalOffset.center,
+                    width: MediaQuery.of(context).size.width / 2.5,
+                    height: 40,
+                    child: FlatButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, 'form');
+                      },
+                      child: Text(
+                        "Confirm Address",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ],
           ),
         ),
@@ -49,3 +78,10 @@ class _cnfrmAddressState extends State<cnfrmAddress> {
     );
   }
 }
+
+//TODO: Improve UI
+//Show OCR Result with scanned address and cropped document image 
+//Verify extracted location with GPS location in a limit of 300m
+//Show Error on wrong location verification
+//User will be given a countdown of 1 min to press confirm or reset 
+//If user confirms store scanned image in storage and update the ongoing document step, timestamp, pincode and scanned_address field
