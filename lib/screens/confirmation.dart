@@ -1,51 +1,46 @@
 import 'package:flutter/material.dart';
 
-class scanDoc extends StatefulWidget {
-  const scanDoc();
+class confirm extends StatefulWidget {
+  const confirm();
 
   @override
-  _scanDocState createState() => _scanDocState();
+  _confirmState createState() => _confirmState();
 }
 
-class _scanDocState extends State<scanDoc> {
+class _confirmState extends State<confirm> {
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope(
-      onWillPop: () async => false,
-      child: new Scaffold(
-        body: Container(
-          constraints: BoxConstraints.expand(),
+    return Scaffold(
+      body: Center(
+        child: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "Scan Documents",
-                style: TextStyle(fontSize: 25),
+              Text("Final confirmation Screen with all the details"),
+              SizedBox(
+                height: 20,
               ),
-              SizedBox(height: 10),
-              Icon(Icons.camera),
-              SizedBox(height: 10),
               Container(
                 decoration: BoxDecoration(
                   color: Color(0xFF143B40),
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
                 alignment: FractionalOffset.center,
-                width: MediaQuery.of(context).size.width / 3,
+                width: MediaQuery.of(context).size.width / 4,
                 height: 40,
                 child: FlatButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, 'confirmaddress');
+                    Navigator.pushNamed(context, 'userlogin');
                   },
                   child: Text(
-                    "Get Address",
+                    "Finish",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 15,
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

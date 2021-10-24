@@ -6,6 +6,10 @@ import 'screens/op_otp.dart';
 import 'screens/scan.dart';
 import 'screens/user_login.dart';
 import 'screens/user_otp.dart';
+import 'screens/capture.dart';
+import 'screens/confirm_address.dart';
+import 'screens/confirmation.dart';
+import 'screens/editable_form.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +37,10 @@ class _MyAppState extends State<MyApp> {
         'userotp': (context) => userOTP(),
         'userlogin': (context) => userLogin(),
         'scan': (context) => scanDoc(),
+        'confirm': (context) => confirm(),
+        'capture': (context) => capture(),
+        'form': (context) => editForm(),
+        'confirmaddress': (context) => cnfrmAddress(),
       },
     );
   }

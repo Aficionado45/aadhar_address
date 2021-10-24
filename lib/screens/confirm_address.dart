@@ -1,44 +1,40 @@
 import 'package:flutter/material.dart';
 
-class scanDoc extends StatefulWidget {
-  const scanDoc();
+class cnfrmAddress extends StatefulWidget {
+  const cnfrmAddress();
 
   @override
-  _scanDocState createState() => _scanDocState();
+  _cnfrmAddressState createState() => _cnfrmAddressState();
 }
 
-class _scanDocState extends State<scanDoc> {
+class _cnfrmAddressState extends State<cnfrmAddress> {
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope(
-      onWillPop: () async => false,
-      child: new Scaffold(
-        body: Container(
-          constraints: BoxConstraints.expand(),
+    return Scaffold(
+      body: Center(
+        child: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "Scan Documents",
-                style: TextStyle(fontSize: 25),
+              Text("Show the scanned document and"),
+              Text("Address read through OCR and ask for confirmation"),
+              SizedBox(
+                height: 20,
               ),
-              SizedBox(height: 10),
-              Icon(Icons.camera),
-              SizedBox(height: 10),
               Container(
                 decoration: BoxDecoration(
                   color: Color(0xFF143B40),
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
                 alignment: FractionalOffset.center,
-                width: MediaQuery.of(context).size.width / 3,
+                width: MediaQuery.of(context).size.width / 2.5,
                 height: 40,
                 child: FlatButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, 'confirmaddress');
+                    Navigator.pushNamed(context, 'form');
                   },
                   child: Text(
-                    "Get Address",
+                    "Confirm Address",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 15,

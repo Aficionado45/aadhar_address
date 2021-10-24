@@ -56,13 +56,13 @@ class _userOTPState extends State<userOTP> {
                         Navigator.pushNamed(context, 'scan');
                         break;
                       case 2:
-                        Navigator.pushNamed(context, 'scan');
+                        Navigator.pushNamed(context, 'form');
                         break;
                       case 3:
-                        Navigator.pushNamed(context, 'scan');
+                        Navigator.pushNamed(context, 'capture');
                         break;
                       case 4:
-                        Navigator.pushNamed(context, 'scan');
+                        Navigator.pushNamed(context, 'confirm');
                     }
                   }
                 },
