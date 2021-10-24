@@ -12,55 +12,71 @@ class userOTP extends StatefulWidget {
 class _userOTPState extends State<userOTP> {
   @override
   String otp;
+
   Widget build(BuildContext context) {
-    return new WillPopScope(
-      onWillPop: () async => false,
-      child: new Scaffold(
-        body: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                margin: EdgeInsets.all(50),
-                child: OTPTextField(
-                  length: 6,
-                  width: MediaQuery.of(context).size.width,
-                  style: TextStyle(fontSize: 15),
-                  textFieldAlignment: MainAxisAlignment.spaceAround,
-                  fieldStyle: FieldStyle.underline,
-                  onCompleted: (pin) {
-                    otp = pin;
-                    print("Completed: " + pin);
-                  },
-                ),
+    final step = ModalRoute.of(context).settings.arguments;
+
+    return Scaffold(
+      body: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              margin: EdgeInsets.all(50),
+              child: OTPTextField(
+                length: 6,
+                width: MediaQuery.of(context).size.width,
+                style: TextStyle(fontSize: 15),
+                textFieldAlignment: MainAxisAlignment.spaceAround,
+                fieldStyle: FieldStyle.underline,
+                onCompleted: (pin) {
+                  otp = pin;
+                  print("Completed: " + pin);
+                },
               ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Color(0xFF143B40),
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                alignment: FractionalOffset.center,
-                width: MediaQuery.of(context).size.width / 3.5,
-                height: 40,
-                child: FlatButton(
-                  onPressed: () {
-                    if (otp != null) {
-                      print("pressed");
-                      Navigator.pushNamed(context, 'scan');
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xFF143B40),
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              alignment: FractionalOffset.center,
+              width: MediaQuery.of(context).size.width / 3.5,
+              height: 40,
+              child: FlatButton(
+                onPressed: () {
+                  if (otp != null) {
+                    print(step);
+                    switch (step) {
+                      case 0:
+                        //create document
+                        Navigator.pushNamed(context, 'scan');
+                        break;
+                      case 1:
+                        Navigator.pushNamed(context, 'scan');
+                        break;
+                      case 2:
+                        Navigator.pushNamed(context, 'scan');
+                        break;
+                      case 3:
+                        Navigator.pushNamed(context, 'scan');
+                        break;
+                      case 4:
+                        Navigator.pushNamed(context, 'scan');
                     }
-                  },
-                  child: Text(
-                    "Enter OTP",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                    ),
+                  }
+                },
+                child: Text(
+                  "Enter OTP",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

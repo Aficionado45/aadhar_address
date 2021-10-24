@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class userLogin extends StatefulWidget {
   const userLogin();
@@ -10,6 +12,21 @@ class userLogin extends StatefulWidget {
 class _userLoginState extends State<userLogin> {
   @override
   String user_aadhar;
+
+  Future<int> checkIfDocExists(String docId) async {
+    try {
+      var collectionRef = FirebaseFirestore.instance.collection('ongoing');
+
+      var doc = await collectionRef.doc(docId).get();
+      if (doc.exists) {
+        int step = doc.get('step');
+        return step;
+      } else
+        return 0;
+    } catch (e) {
+      throw e;
+    }
+  }
 
   Widget build(BuildContext context) {
     return new WillPopScope(
@@ -57,10 +74,10 @@ class _userLoginState extends State<userLogin> {
                 width: MediaQuery.of(context).size.width / 4,
                 height: 40,
                 child: FlatButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    int step = await checkIfDocExists(user_aadhar);
                     if (user_aadhar != null && user_aadhar.length == 12) {
-                      print("pressed");
-                      Navigator.pushNamed(context, 'userotp');
+                      Navigator.pushNamed(context, 'userotp', arguments: step);
                     }
                   },
                   child: Text(
