@@ -50,7 +50,6 @@ class _userOTPState extends State<userOTP> {
                     print(step);
                     switch (step) {
                       case 0:
-                        //create document
                         Navigator.pushNamed(context, 'scan');
                         break;
                       case 1:

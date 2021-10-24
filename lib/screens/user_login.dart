@@ -16,7 +16,6 @@ class _userLoginState extends State<userLogin> {
   Future<int> checkIfDocExists(String docId) async {
     try {
       var collectionRef = FirebaseFirestore.instance.collection('ongoing');
-
       var doc = await collectionRef.doc(docId).get();
       if (doc.exists) {
         int step = doc.get('step');
@@ -26,6 +25,16 @@ class _userLoginState extends State<userLogin> {
     } catch (e) {
       throw e;
     }
+  }
+
+  void addUser(String id) {
+    var db = FirebaseFirestore.instance;
+    DateTime curr = DateTime.now();
+    db.collection("ongoing").doc(id).set({
+      "step": 1,
+      "aadhar": id,
+      "timestamp": curr,
+    });
   }
 
   Widget build(BuildContext context) {
@@ -76,6 +85,9 @@ class _userLoginState extends State<userLogin> {
                 child: FlatButton(
                   onPressed: () async {
                     int step = await checkIfDocExists(user_aadhar);
+                    if (step == 0) {
+                      addUser(user_aadhar);
+                    }
                     if (user_aadhar != null && user_aadhar.length == 12) {
                       Navigator.pushNamed(context, 'userotp', arguments: step);
                     }
