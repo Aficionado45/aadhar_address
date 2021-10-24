@@ -9,9 +9,10 @@ class userLogin extends StatefulWidget {
   _userLoginState createState() => _userLoginState();
 }
 
+String user_aadhar;
+
 class _userLoginState extends State<userLogin> {
   @override
-  String user_aadhar;
 
   Future<int> checkIfDocExists(String docId) async {
     try {
