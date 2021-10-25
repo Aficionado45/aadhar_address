@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:aadhar_address/screens/capture.dart';
+import 'package:aadhar_address/screens/user_login.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -148,7 +150,8 @@ class _scanDocState extends State<scanDoc> {
                     width: MediaQuery.of(context).size.width / 3,
                     height: 80,
                     child: FlatButton(
-                      onPressed: () {
+                      onPressed: () async{
+                        await uploadImage(_initialImage, '$user_aadhar/document.png');
                         Navigator.pushNamed(context, 'confirmaddress');
                       },
                       child: Text(
