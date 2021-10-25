@@ -19,6 +19,7 @@ Future pickImageFromCamera(BuildContext context) async {
     final pickedFile = await picker.getImage(
       source: ImageSource.camera,
       maxHeight: MediaQuery.of(context).size.height / 4,
+      maxWidth: MediaQuery.of(context).size.height / 3.5,
     );
     return pickedFile;
   } catch (err) {
@@ -116,6 +117,7 @@ class _captureState extends State<capture> {
                           ? Image(
                               image: FileImage(
                                 operatorImage,
+
                               ),
                             )
                           : Icon(
