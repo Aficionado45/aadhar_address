@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:aadhar_address/screens/capture.dart';
+import 'package:aadhar_address/screens/confirm_address.dart';
 import 'package:aadhar_address/screens/user_login.dart';
 import 'package:aadhar_address/utils/feedback_form.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
@@ -8,12 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-enum AppState {
-  free,
-  picked,
-  cropped,
-  extracted
-}
+enum AppState { free, picked, cropped, extracted }
 
 class scanDoc extends StatefulWidget {
   const scanDoc();
@@ -25,6 +21,7 @@ class scanDoc extends StatefulWidget {
 class _scanDocState extends State<scanDoc> {
   AppState state;
   File _image;
+
   //Initial image contains the initial file
   File _initialImage;
   TextEditingController script = TextEditingController();
@@ -40,7 +37,7 @@ class _scanDocState extends State<scanDoc> {
           child: Icon(
             Icons.help_outline_rounded,
           ),
-          onPressed: () async{
+          onPressed: () async {
             getFeedback(context);
           },
         ),
@@ -57,25 +54,25 @@ class _scanDocState extends State<scanDoc> {
                 SizedBox(height: 20),
                 _image == null
                     ? Text(
-                  'No image selected.',
-                  style: TextStyle(fontSize: 20, color: Colors.white),
-                )
+                        'No image selected.',
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      )
                     : Container(
-                    height: 300, width: 300, child: Image.file(_image)),
+                        height: 300, width: 300, child: Image.file(_image)),
                 SizedBox(height: 20),
                 script.text != null
                     ? Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: TextFormField(
-                    controller: script,
-                    minLines: 5,
-                    maxLines: 100,
-                    style: TextStyle(color: Colors.black, fontSize: 16),
-                    onChanged: (val) {
-                      setState(() {});
-                    },
-                  ),
-                )
+                        padding: const EdgeInsets.all(32.0),
+                        child: TextFormField(
+                          controller: script,
+                          minLines: 5,
+                          maxLines: 100,
+                          style: TextStyle(color: Colors.black, fontSize: 16),
+                          onChanged: (val) {
+                            setState(() {});
+                          },
+                        ),
+                      )
                     : Text("No Text found"),
                 SizedBox(height: 20),
                 SizedBox(height: 10),
@@ -103,7 +100,7 @@ class _scanDocState extends State<scanDoc> {
                       ),
                     ),
                   ),
-                if (state == AppState.picked|| state == AppState.extracted)
+                if (state == AppState.picked || state == AppState.extracted)
                   Container(
                     decoration: BoxDecoration(
                       color: Color(0xFF143B40),
@@ -160,9 +157,19 @@ class _scanDocState extends State<scanDoc> {
                     width: MediaQuery.of(context).size.width / 3,
                     height: 80,
                     child: FlatButton(
-                      onPressed: () async{
-                        await uploadImage(_initialImage, '$user_aadhar/document.png');
-                        Navigator.pushNamed(context, 'confirmaddress');
+                      onPressed: () async {
+                        //Line is commented out for testing
+                        // await uploadImage(_initialImage, '$user_aadhar/document.png');
+                        Navigator.push(
+                          context,
+                          //AS A PARAMTER SENDING THE TESTING ADDRESS, ELSE we will have to send the extracted address i.e script.text
+                          MaterialPageRoute(
+                            builder: (context) => cnfrmAddress(
+                              address:
+                                  "34AROY M.C LAHIRI STREET ganesh apart ment, Chatra, Serampore, West Bengal 712204, India",
+                            ),
+                          ),
+                        );
                       },
                       child: Text(
                         "Confirm Address and Proceed",
@@ -186,13 +193,14 @@ class _scanDocState extends State<scanDoc> {
     super.initState();
     state = AppState.free;
   }
+
   //Operator captures document from camera
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
-        _initialImage=_image;
+        _initialImage = _image;
         setState(() {
           state = AppState.picked;
         });
@@ -202,31 +210,27 @@ class _scanDocState extends State<scanDoc> {
     });
   }
 
-
-
-
-
   Future<Null> cropImage() async {
     File croppedFile = await ImageCropper.cropImage(
         sourcePath: _image.path,
         aspectRatioPresets: Platform.isAndroid
-        ? [
-        CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
-        ]
-        : [
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio5x3,
-        CropAspectRatioPreset.ratio5x4,
-        CropAspectRatioPreset.ratio7x5,
-        CropAspectRatioPreset.ratio16x9
-        ],
+            ? [
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio16x9
+              ]
+            : [
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.square,
+                CropAspectRatioPreset.ratio3x2,
+                CropAspectRatioPreset.ratio4x3,
+                CropAspectRatioPreset.ratio5x3,
+                CropAspectRatioPreset.ratio5x4,
+                CropAspectRatioPreset.ratio7x5,
+                CropAspectRatioPreset.ratio16x9
+              ],
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Crop the Image',
             toolbarColor: Color(0xff375079),
@@ -242,6 +246,7 @@ class _scanDocState extends State<scanDoc> {
       });
     }
   }
+
   //Reading address
   void getText() async {
     await readText(_image);
@@ -249,6 +254,7 @@ class _scanDocState extends State<scanDoc> {
       state = AppState.extracted;
     });
   }
+
   Future readText(File image) async {
     FirebaseVisionImage ourImage = FirebaseVisionImage.fromFile(image);
     TextRecognizer recognizeText = FirebaseVision.instance.textRecognizer();
@@ -266,9 +272,7 @@ class _scanDocState extends State<scanDoc> {
     }
     setState(() {});
   }
-
 }
-
 
 //TODO: Impprove UI
 //OCR Integration
