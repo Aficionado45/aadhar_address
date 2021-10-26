@@ -162,7 +162,7 @@ class _scanDocState extends State<scanDoc> {
                         // await uploadImage(_initialImage, '$user_aadhar/document.png');
                         Navigator.push(
                           context,
-                          //AS A PARAMTER SENDING THE TESTING ADDRESS, ELSE we will have to send the extracted address i.e script.text
+                          //AS A PARAMTER SEND UR ADDRESS for testing, ELSE we will have to send the extracted address i.e script.text
                           MaterialPageRoute(
                             builder: (context) => cnfrmAddress(
                               address:
