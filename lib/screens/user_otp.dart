@@ -1,3 +1,4 @@
+import 'package:aadhar_address/utils/feedback_form.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
@@ -17,6 +18,15 @@ class _userOTPState extends State<userOTP> {
     final step = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Color(0xFF143B40),
+        child: Icon(
+          Icons.help_outline_rounded,
+        ),
+        onPressed: () async{
+          getFeedback(context);
+        },
+      ),
       body: Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

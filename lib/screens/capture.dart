@@ -1,5 +1,6 @@
 import 'package:aadhar_address/screens/scan.dart';
 import 'package:aadhar_address/screens/user_login.dart';
+import 'package:aadhar_address/utils/feedback_form.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -48,6 +49,15 @@ class _captureState extends State<capture> {
     return new WillPopScope(
       onWillPop: () async => false,
       child: new Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Color(0xFF143B40),
+          child: Icon(
+            Icons.help_outline_rounded,
+          ),
+          onPressed: () async{
+            getFeedback(context);
+          },
+        ),
         body: Container(
           constraints: BoxConstraints.expand(),
           child: Column(

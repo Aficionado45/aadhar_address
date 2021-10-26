@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:aadhar_address/screens/capture.dart';
 import 'package:aadhar_address/screens/user_login.dart';
+import 'package:aadhar_address/utils/feedback_form.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -34,6 +35,15 @@ class _scanDocState extends State<scanDoc> {
     return new WillPopScope(
       onWillPop: () async => false,
       child: new Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Color(0xFF143B40),
+          child: Icon(
+            Icons.help_outline_rounded,
+          ),
+          onPressed: () async{
+            getFeedback(context);
+          },
+        ),
         body: Container(
           constraints: BoxConstraints.expand(),
           child: SingleChildScrollView(
