@@ -15,17 +15,16 @@ class editForm extends StatefulWidget {
 }
 
 class _editFormState extends State<editForm> {
-
   //address.text contains address
   //pinfield.text contains pin code
-
 
   TextEditingController addressfield = new TextEditingController();
   TextEditingController pinfield = new TextEditingController();
   AppState state = AppState.free;
   double _distanceinmeters;
   Location location = Location();
-  bool editable=true;
+  bool editable = true;
+
   @override
   void initState() {
     addressfield.text = widget.address;
@@ -67,13 +66,12 @@ class _editFormState extends State<editForm> {
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(25.0),
-                      borderSide: new BorderSide(
-                      ),
+                      borderSide: new BorderSide(),
                     ),
                     //fillColor: Colors.green
                   ),
                 ),
-                SizedBox(height:10.0),
+                SizedBox(height: 10.0),
                 TextFormField(
                   controller: pinfield,
                   readOnly: !editable,
@@ -87,8 +85,7 @@ class _editFormState extends State<editForm> {
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(25.0),
-                      borderSide: new BorderSide(
-                      ),
+                      borderSide: new BorderSide(),
                     ),
                     //fillColor: Colors.green
                   ),
@@ -99,35 +96,35 @@ class _editFormState extends State<editForm> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xFF143B40),
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        alignment: FractionalOffset.center,
-                        width: MediaQuery.of(context).size.width / 2.5,
-                        height: 40,
-                        child: FlatButton(
-                          onPressed: () async {
-                            _distanceinmeters =
-                                await getlocation(addressfield.text);
-                            print(_distanceinmeters);
-                            setState(() {
-                              state = _distanceinmeters > 300
-                                  ? AppState.unsuccessful
-                                  : AppState.comparedlocation;
-                              editable=false;
-                            });
-                          },
-                          child: Text(
-                            "Get GPS Location",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                            ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xFF143B40),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                      alignment: FractionalOffset.center,
+                      width: MediaQuery.of(context).size.width / 2.5,
+                      height: 40,
+                      child: FlatButton(
+                        onPressed: () async {
+                          _distanceinmeters =
+                              await getlocation(addressfield.text);
+                          print(_distanceinmeters);
+                          setState(() {
+                            state = _distanceinmeters > 300
+                                ? AppState.unsuccessful
+                                : AppState.comparedlocation;
+                            editable = false;
+                          });
+                        },
+                        child: Text(
+                          "Get GPS Location",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
                           ),
                         ),
                       ),
+                    ),
                     if (state == AppState.comparedlocation)
                       Container(
                         decoration: BoxDecoration(
@@ -149,34 +146,34 @@ class _editFormState extends State<editForm> {
                             ),
                           ),
                         ),
-                      )
+                      ),
                   ],
                 ),
                 if (state == AppState.comparedlocation)
-                Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xFF143B40),
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  alignment: FractionalOffset.center,
-                  width: MediaQuery.of(context).size.width / 2.5,
-                  height: 40,
-                  child: FlatButton(
-                    onPressed: ()  {
-                      setState(() {
-                        state=AppState.free;
-                        editable=true;
-                      });
-                    },
-                    child: Text(
-                      "Edit Again",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFF143B40),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    alignment: FractionalOffset.center,
+                    width: MediaQuery.of(context).size.width / 2.5,
+                    height: 40,
+                    child: FlatButton(
+                      onPressed: () {
+                        setState(() {
+                          state = AppState.free;
+                          editable = true;
+                        });
+                      },
+                      child: Text(
+                        "Edit Again",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
                   ),
-                ),
                 if (_distanceinmeters != null)
                   Text(
                     "Discrepancy: $_distanceinmeters meters",
