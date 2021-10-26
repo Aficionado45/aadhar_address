@@ -16,7 +16,7 @@ class editForm extends StatefulWidget {
 
 class _editFormState extends State<editForm> {
 
-  //address.text contains text
+  //address.text contains address
   //pinfield.text contains pin code
 
 
