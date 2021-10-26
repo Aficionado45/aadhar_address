@@ -72,6 +72,14 @@ class _scanDocState extends State<scanDoc> {
                           onChanged: (val) {
                             setState(() {});
                           },
+                          decoration: new InputDecoration(
+                            border: new OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(25.0),
+                              borderSide: new BorderSide(
+                              ),
+                            ),
+                            //fillColor: Colors.green
+                          ),
                         ),
                       )
                     : Text("No Text found"),

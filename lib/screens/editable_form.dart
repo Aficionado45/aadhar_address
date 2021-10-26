@@ -16,6 +16,7 @@ class editForm extends StatefulWidget {
 
 class _editFormState extends State<editForm> {
   TextEditingController addressfield = new TextEditingController();
+  TextEditingController pinfield = new TextEditingController();
   AppState state = AppState.free;
   double _distanceinmeters;
   Location location = Location();
@@ -47,17 +48,44 @@ class _editFormState extends State<editForm> {
                 Text("Editable Form for adding Small Changes"),
                 Text("Confirm changed address with live location and"),
                 Text("Origianlly retrived address form document"),
-                Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: TextFormField(
-                    controller: addressfield,
-                    readOnly: !editable,
-                    minLines: 5,
-                    maxLines: 100,
-                    style: TextStyle(color: Colors.black, fontSize: 16),
-                    onChanged: (val) {
-                      setState(() {});
-                    },
+                TextFormField(
+                  controller: addressfield,
+                  readOnly: !editable,
+                  minLines: 5,
+                  maxLines: 100,
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                  onChanged: (val) {
+                    setState(() {});
+                  },
+                  decoration: new InputDecoration(
+                    labelText: "Edit Address",
+                    fillColor: Colors.white,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                      borderSide: new BorderSide(
+                      ),
+                    ),
+                    //fillColor: Colors.green
+                  ),
+                ),
+                SizedBox(height:10.0),
+                TextFormField(
+                  controller: pinfield,
+                  readOnly: !editable,
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                  onChanged: (val) {
+                    setState(() {});
+                  },
+                  keyboardType: TextInputType.number,
+                  decoration: new InputDecoration(
+                    labelText: "Enter PIN Code",
+                    fillColor: Colors.white,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                      borderSide: new BorderSide(
+                      ),
+                    ),
+                    //fillColor: Colors.green
                   ),
                 ),
                 SizedBox(
