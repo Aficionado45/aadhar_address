@@ -15,6 +15,11 @@ class editForm extends StatefulWidget {
 }
 
 class _editFormState extends State<editForm> {
+
+  //address.text contains text
+  //pinfield.text contains pin code
+
+
   TextEditingController addressfield = new TextEditingController();
   TextEditingController pinfield = new TextEditingController();
   AppState state = AppState.free;
