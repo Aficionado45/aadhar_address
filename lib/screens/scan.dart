@@ -64,6 +64,7 @@ class _scanDocState extends State<scanDoc> {
                     ? Padding(
                         padding: const EdgeInsets.all(32.0),
                         child: TextFormField(
+                          readOnly: true,
                           controller: script,
                           minLines: 5,
                           maxLines: 100,
@@ -165,11 +166,11 @@ class _scanDocState extends State<scanDoc> {
                           //AS A PARAMTER SEND UR ADDRESS for testing, ELSE we will have to send the extracted address i.e script.text
                           MaterialPageRoute(
                             builder: (context) => cnfrmAddress(
-                              address:
-                                  "34AROY M.C LAHIRI STREET ganesh apart ment, Chatra, Serampore, West Bengal 712204, India",
+                              address:script.text
                             ),
                           ),
                         );
+                        // "34AROY M.C LAHIRI STREET ganesh apart ment, Chatra, Serampore, West Bengal 712204, India",
                       },
                       child: Text(
                         "Confirm Address and Proceed",
