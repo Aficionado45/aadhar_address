@@ -1,3 +1,4 @@
+import 'package:aadhar_address/utils/feedback_form.dart';
 import 'package:flutter/material.dart';
 
 class editForm extends StatefulWidget {
@@ -12,6 +13,15 @@ class _editFormState extends State<editForm> {
     return new WillPopScope(
       onWillPop: () async => false,
       child: new Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Color(0xFF143B40),
+          child: Icon(
+            Icons.help_outline_rounded,
+          ),
+          onPressed: () async{
+            getFeedback(context);
+          },
+        ),
         body: Center(
           child: Container(
             child: Column(

@@ -1,3 +1,4 @@
+import 'package:aadhar_address/utils/feedback_form.dart';
 import 'package:flutter/material.dart';
 
 class cnfrmAddress extends StatefulWidget {
@@ -11,6 +12,15 @@ class _cnfrmAddressState extends State<cnfrmAddress> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Color(0xFF143B40),
+        child: Icon(
+          Icons.help_outline_rounded,
+        ),
+        onPressed: () async{
+          getFeedback(context);
+        },
+      ),
       body: Center(
         child: Container(
           child: Column(

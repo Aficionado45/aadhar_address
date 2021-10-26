@@ -17,11 +17,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Image(
+                  image: AssetImage('images/Aadhaar_Logo.svg'),
+                  height: MediaQuery.of(context).size.height / 4,
+                ),
                 Center(
-                  child: Text('Aadhar Address App',
+                  child: Text('Aadhaar Address App',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
+                        fontFamily: 'Zen'
+                        // fontFamily: 'Open Sans'
                       )),
                 ),
                 SizedBox(
