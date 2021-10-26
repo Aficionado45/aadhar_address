@@ -54,7 +54,7 @@ class _captureState extends State<capture> {
           child: Icon(
             Icons.help_outline_rounded,
           ),
-          onPressed: () async{
+          onPressed: () async {
             getFeedback(context);
           },
         ),
@@ -76,9 +76,13 @@ class _captureState extends State<capture> {
                   Column(
                     children: [
                       userUploaded
-                          ? Image(
-                              image: FileImage(
-                                userImage,
+                          ? Container(
+                              width: MediaQuery.of(context).size.width / 3,
+                              height: MediaQuery.of(context).size.height / 4,
+                              child: Image(
+                                image: FileImage(
+                                  userImage,
+                                ),
                               ),
                             )
                           : Icon(
@@ -124,10 +128,13 @@ class _captureState extends State<capture> {
                   Column(
                     children: [
                       operatorUploaded
-                          ? Image(
-                              image: FileImage(
-                                operatorImage,
-
+                          ? Container(
+                              width: MediaQuery.of(context).size.width / 3,
+                              height: MediaQuery.of(context).size.height / 4,
+                              child: Image(
+                                image: FileImage(
+                                  operatorImage,
+                                ),
                               ),
                             )
                           : Icon(

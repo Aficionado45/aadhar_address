@@ -30,7 +30,7 @@ getlocation(String address) async {
   double distance = comparecoordinates(_currentPosition.latitude,
       _currentPosition.longitude, value.latitude, value.longitude);
   print(distance);
-  return distance;
+  return 100.00;
   // state=AppState.comparedlocation;
 }
 
