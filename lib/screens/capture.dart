@@ -195,7 +195,7 @@ class _captureState extends State<capture> {
                     height: 40,
                     child: FlatButton(
                       onPressed: () async {
-                        Navigator.pushNamed(context, 'capture');
+                        Navigator.pushReplacementNamed(context, 'capture');
                       },
                       child: Text(
                         "Reset",

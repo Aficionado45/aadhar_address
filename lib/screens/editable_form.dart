@@ -21,7 +21,9 @@ class _editFormState extends State<editForm> {
   TextEditingController addressfield = new TextEditingController();
   TextEditingController pinfield = new TextEditingController();
   AppState state = AppState.free;
-  double _distanceinmeters;
+  //_distanceinmeters contain distance between editable form address and present gps loc
+  //_distanceinmeters2 contain distance between ocr address and present gps loc
+  double _distanceinmeters2, _distanceinmeters;
   Location location = Location();
   bool editable = true;
 
@@ -44,10 +46,11 @@ class _editFormState extends State<editForm> {
             getFeedback(context);
           },
         ),
-        body: Center(
+        body: SingleChildScrollView(
           child: Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text("Editable Form for adding Small Changes"),
                 Text("Confirm changed address with live location and"),
@@ -106,11 +109,15 @@ class _editFormState extends State<editForm> {
                       height: 40,
                       child: FlatButton(
                         onPressed: () async {
+                          //comparing editable form address with location
                           _distanceinmeters =
                               await getlocation(addressfield.text);
+                          //comparing ocr address with location
+                          _distanceinmeters2 =
+                              await getlocation(widget.address);
                           print(_distanceinmeters);
                           setState(() {
-                            state = _distanceinmeters > 300
+                            state = _distanceinmeters > 300&&_distanceinmeters2>300
                                 ? AppState.unsuccessful
                                 : AppState.comparedlocation;
                             editable = false;
@@ -179,9 +186,14 @@ class _editFormState extends State<editForm> {
                     "Discrepancy: $_distanceinmeters meters",
                     textAlign: TextAlign.center,
                   ),
-                if (state == AppState.unsuccessful)
+                if (state == AppState.unsuccessful && _distanceinmeters>300)
                   Text(
-                    "The Distance between the address extracted from OCR and the address otained from GPS is more than 300 metres. Reset and try again",
+                    "The Distance between the address you edited in the textfield and the address otained from GPS is more than 300 metres. Reset and try again",
+                    textAlign: TextAlign.center,
+                  ),
+                if (state == AppState.unsuccessful && _distanceinmeters2>300)
+                  Text(
+                    "The Distance between the address received from OCR extraction and the address otained from GPS is more than 300 metres. Reset and try again",
                     textAlign: TextAlign.center,
                   ),
                 if (state == AppState.comparedlocation)

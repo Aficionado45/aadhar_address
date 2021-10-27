@@ -60,32 +60,48 @@ class _scanDocState extends State<scanDoc> {
                     : Container(
                         height: 300, width: 300, child: Image.file(_image)),
                 SizedBox(height: 20),
-                script.text != null
-                    ? Padding(
-                        padding: const EdgeInsets.all(32.0),
-                        child: TextFormField(
-                          readOnly: true,
-                          controller: script,
-                          minLines: 5,
-                          maxLines: 100,
-                          style: TextStyle(color: Colors.black, fontSize: 16),
-                          onChanged: (val) {
-                            setState(() {});
-                          },
-                          decoration: new InputDecoration(
-                            border: new OutlineInputBorder(
-                              borderRadius: new BorderRadius.circular(25.0),
-                              borderSide: new BorderSide(
-                              ),
-                            ),
-                            //fillColor: Colors.green
-                          ),
+                if (state == AppState.extracted)
+                  Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: TextFormField(
+                      readOnly: true,
+                      controller: script,
+                      minLines: 5,
+                      maxLines: 100,
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                      onChanged: (val) {
+                        setState(() {});
+                      },
+                      decoration: new InputDecoration(
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(25.0),
+                          borderSide: new BorderSide(),
                         ),
-                      )
-                    : Text("No Text found"),
+                        //fillColor: Colors.green
+                      ),
+                    ),
+                  ),
+                if (state == AppState.free)
+                Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(10.0),
+                      height: MediaQuery.of(context).size.height / 2,
+                      width: MediaQuery.of(context).size.width,
+                      child: Card(
+                          color: Colors.grey,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Capture and upload a document",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 30)),
+                                Icon(Icons.camera),
+                              ])),
+                    )),
                 SizedBox(height: 20),
                 SizedBox(height: 10),
-                Icon(Icons.camera),
                 SizedBox(height: 10),
                 if (state == AppState.free)
                   Container(
@@ -123,7 +139,7 @@ class _scanDocState extends State<scanDoc> {
                         cropImage();
                       },
                       child: Text(
-                        "Crop Again",
+                        "Crop Document",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 15,
@@ -173,9 +189,8 @@ class _scanDocState extends State<scanDoc> {
                           context,
                           //AS A PARAMTER SEND UR ADDRESS for testing, ELSE we will have to send the extracted address i.e script.text
                           MaterialPageRoute(
-                            builder: (context) => cnfrmAddress(
-                              address:script.text
-                            ),
+                            builder: (context) =>
+                                cnfrmAddress(address: script.text),
                           ),
                         );
                         // "34AROY M.C LAHIRI STREET ganesh apart ment, Chatra, Serampore, West Bengal 712204, India",
