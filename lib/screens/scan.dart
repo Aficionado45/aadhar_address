@@ -52,34 +52,34 @@ class _scanDocState extends State<scanDoc> {
     return new WillPopScope(
       onWillPop: () async => false,
       child: new Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          toolbarHeight: MediaQuery.of(context).size.height / 8,
-          elevation: 0,
-          leadingWidth: MediaQuery.of(context).size.width / 4,
-          leading: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Hero(
-              tag: 'logo',
-              child: Image(
-                image: AssetImage('images/Aadhaar_Logo.svg'),
-              ),
-            ),
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(
-                Icons.help_outline_rounded,
-                color: Color(0xFF143B40),
-                size: 30,
-              ),
-              onPressed: () {
-                getFeedback(context);
-              },
-            )
-          ],
-        ),
-        backgroundColor: Colors.white,
+        // appBar: AppBar(
+        //   backgroundColor: Colors.white,
+        //   toolbarHeight: MediaQuery.of(context).size.height / 8,
+        //   elevation: 0,
+        //   leadingWidth: MediaQuery.of(context).size.width / 4,
+        //   leading: Padding(
+        //     padding: const EdgeInsets.all(10.0),
+        //     child: Hero(
+        //       tag: 'logo',
+        //       child: Image(
+        //         image: AssetImage('images/Aadhaar_Logo.svg'),
+        //       ),
+        //     ),
+        //   ),
+        //   actions: [
+        //     IconButton(
+        //       icon: Icon(
+        //         Icons.help_outline_rounded,
+        //         color: Color(0xFF143B40),
+        //         size: 30,
+        //       ),
+        //       onPressed: () {
+        //         getFeedback(context);
+        //       },
+        //     )
+        //   ],
+        // ),
+        // backgroundColor: Colors.white,
         body: Container(
           constraints: BoxConstraints.expand(),
           child: SingleChildScrollView(

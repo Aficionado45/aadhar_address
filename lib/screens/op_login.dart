@@ -115,23 +115,26 @@ class _opLoginState extends State<opLogin> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 30),
               Container(
                 decoration: BoxDecoration(
                   color: Color(0xFF143B40),
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
                 alignment: FractionalOffset.center,
-                width: MediaQuery.of(context).size.width / 3,
+                width: MediaQuery.of(context).size.width / 2.5,
                 height: 40,
                 child: FlatButton(
                   onPressed: () async {
                     bool exists = await checkIfDocExists(op_aadhar);
                     if (op_aadhar != null && op_aadhar.length == 12 && exists) {
+                      print('Conditions are true.');
                       Map<String, dynamic> responsebody = await getcaptcha();
                       //decoding response
-                      setState(() {
+                      setState(() async{
                         error = false;
+                        print('No errors');
+                        print(responsebody.toString());
                         var captchaBase64String =
                             responsebody["captchaBase64String"];
                         captchatxnid = responsebody["captchaTxnId"];
@@ -157,101 +160,12 @@ class _opLoginState extends State<opLogin> {
                     "Get Captcha",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: MediaQuery.of(context).size.width / 30,
+                        fontSize: 20,
                         fontFamily: 'Open Sans',
                         fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
-              SizedBox(height: 30),
-              if (captchaimage != null)
-                Column(
-                  children: [
-                    captchaimage,
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      width: MediaQuery.of(context).size.width / 1.3,
-                      height: MediaQuery.of(context).size.height / 13.6,
-                      child: TextFormField(
-                        controller: captchafield,
-                        style: TextStyle(color: Colors.black, fontSize: 16),
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 20.0),
-                          border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(32.0)),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                // color: Colors.redAccent,
-                                width: 1.0),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(32.0)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                // color: Colors.redAccent,
-                                width: 2.0),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(32.0)),
-                          ),
-                          filled: true,
-                          labelStyle:
-                              TextStyle(color: Colors.black, fontSize: 20),
-                          labelText: "Enter Captcha",
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xFF143B40),
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      alignment: FractionalOffset.center,
-                      width: MediaQuery.of(context).size.width / 3,
-                      height: 40,
-                      child: FlatButton(
-                        onPressed: () async {
-                          Map<String, dynamic> responsebody = await getotp(
-                              op_aadhar, captchafield.text, captchatxnid);
-                          print(responsebody);
-                          setState(() {
-                            responsebody["message"] == "Invalid Captcha"
-                                ? errorcaptcha = true
-                                : errorcaptcha = false;
-                            otpmessage = responsebody["message"];
-                          });
-                          if (errorcaptcha == false)
-                            Navigator.pushNamed(context, 'opotp');
-                        },
-                        child: Text(
-                          "Verify Captcha",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: MediaQuery.of(context).size.width / 35,
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                    // FlatButton(
-                    //   onPressed: () async {
-                    //     Navigator.pushNamed(context, 'opotp');
-                    //   },
-                    //   child: Text(
-                    //     "move to next screen",
-                    //     style: TextStyle(
-                    //       color: Colors.black,
-                    //       fontSize: 20,
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
               Spacer(),
               Text(
                 'Please enter a valid 12 digit Aadhaar Number',
@@ -273,6 +187,72 @@ class _opLoginState extends State<opLogin> {
               ),
 
               //captcha views
+
+              if (captchaimage != null)
+                Column(
+                  children: [
+                    captchaimage,
+                    TextFormField(
+                      controller: captchafield,
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 20.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              // color: Colors.redAccent,
+                              width: 1.0),
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              // color: Colors.redAccent,
+                              width: 2.0),
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        ),
+                        filled: true,
+                        labelStyle:
+                            TextStyle(color: Colors.black, fontSize: 20),
+                        labelText: "Enter Captcha",
+                      ),
+                    ),
+                    FlatButton(
+                      onPressed: () async {
+                        Map<String, dynamic> responsebody = await getotp(
+                            op_aadhar, captchafield.text, captchatxnid);
+                        print(responsebody);
+                        setState(() {
+                          responsebody["message"] == "Invalid Captcha"
+                              ? errorcaptcha = true
+                              : errorcaptcha = false;
+                          otpmessage = responsebody["message"];
+                        });
+                      },
+                      child: Text(
+                        "Verify Captcha",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                    FlatButton(
+                      onPressed: () async {
+                        Navigator.pushNamed(context, 'opotp');
+                      },
+                      child: Text(
+                        "move to next screen",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
             ],
           ),
         ),

@@ -11,9 +11,11 @@ Future<Map<String, dynamic>> getcaptcha() async {
   };
   var myUri = Uri.parse(
       "https://stage1.uidai.gov.in/unifiedAppAuthService/api/v2/get/captcha");
+
   var response = await http.post(myUri, body: json.encode(params), headers: {
     'Content-type': 'application/json',
   });
+  print('Called');
   Map<String, dynamic> responsebody = json.decode(response.body);
   return responsebody;
 }
