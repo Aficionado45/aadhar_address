@@ -89,7 +89,7 @@ class _userOTPState extends State<userOTP> {
                     setState(() {
                       error = false;
                     });
-                    switch (step) {
+                    switch (3) {
                       case 0:
                         Navigator.pushNamed(context, 'scan');
                         break;

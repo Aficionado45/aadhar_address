@@ -1,4 +1,6 @@
 
+import 'package:aadhar_address/screens/op_login.dart';
+import 'package:aadhar_address/services/authentication_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_field_style.dart';
@@ -71,13 +73,15 @@ class _opOTPState extends State<opOTP> {
               width: MediaQuery.of(context).size.width / 3.0,
               height: 40,
               child: FlatButton(
-                onPressed: () {
+                onPressed: () async{
                   if (otp != null) {
                     setState(() {
                       error = false;
                     });
-                    print("pressed");
-                    Navigator.pushNamed(context, 'userlogin');
+                    bool isValidated = await validateOTP(op_aadhar, otp, captchatxnid);
+                    if(isValidated){
+                      Navigator.pushNamed(context, 'userlogin');
+                    }
                   }
                   else{
                     setState(() {
