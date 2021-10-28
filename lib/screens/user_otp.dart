@@ -71,6 +71,7 @@ class _userOTPState extends State<userOTP> {
                 fieldWidth: MediaQuery.of(context).size.width / 10,
                 fieldStyle: FieldStyle.underline,
                 onCompleted: (pin) {
+                  if(pin.isNotEmpty)
                   otp = pin;
                   print("Completed: " + pin);
                 },
@@ -88,14 +89,13 @@ class _userOTPState extends State<userOTP> {
               height: 40,
               child: FlatButton(
                 onPressed: () async {
+                  print(widget.step);
                   if (otp != null) {
-                    print(widget.step);
                     setState(() {
                       error = false;
                     });
                     bool isValidated =
                         await validateOTP(widget.aadharno, otp, widget.txnid);
-                    print(isValidated);
                     if (isValidated) {
                       switch (3) {
                         case 0:

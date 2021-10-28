@@ -1,9 +1,7 @@
 import 'dart:typed_data';
-
 import 'package:aadhar_address/screens/user_otp.dart';
 import 'package:aadhar_address/services/authentication_methods.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
@@ -105,7 +103,6 @@ class _userLoginState extends State<userLogin> {
                       return null;
                     else {
                       user_aadhar = value;
-                      print(user_aadhar);
                     }
                   },
                   decoration: InputDecoration(
@@ -252,11 +249,12 @@ class _userLoginState extends State<userLogin> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    userOTP(aadharno:user_aadhar,txnid: responsebody["txnId"],step:step),
+                                builder: (context) => userOTP(
+                                    aadharno: user_aadhar,
+                                    txnid: responsebody["txnId"],
+                                    step: step),
                               ),
                             );
-                            user_aadhar = null;
                           }
                         },
                         child: Text(
@@ -283,7 +281,6 @@ class _userLoginState extends State<userLogin> {
                     // ),
                   ],
                 ),
-              Spacer(),
               Text(
                 'Please enter a valid 12 digit Aadhaar Number',
                 style: TextStyle(
@@ -291,9 +288,15 @@ class _userLoginState extends State<userLogin> {
                     fontFamily: 'Open Sans',
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 12,
-              )
+              if (otpmessage != null)
+                Text(
+                  otpmessage,
+                  style: TextStyle(
+                      color: errorcaptcha ? Colors.red : Colors.white,
+                      fontFamily: 'Open Sans',
+                      fontWeight: FontWeight.bold),
+                ),
+              Spacer(),
             ],
           ),
         ),
