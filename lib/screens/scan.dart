@@ -21,6 +21,7 @@ class scanDoc extends StatefulWidget {
 class _scanDocState extends State<scanDoc> {
   AppState state;
   File _image;
+  bool error = false;
 
   //Initial image contains the initial file
   File _initialImage;
@@ -32,21 +33,41 @@ class _scanDocState extends State<scanDoc> {
     return new WillPopScope(
       onWillPop: () async => false,
       child: new Scaffold(
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Color(0xFF143B40),
-          child: Icon(
-            Icons.help_outline_rounded,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          toolbarHeight: MediaQuery.of(context).size.height/8,
+          elevation: 0,
+          leadingWidth: MediaQuery.of(context).size.width/4,
+          leading: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Hero(
+              tag: 'logo',
+              child: Image(
+                image: AssetImage('images/Aadhaar_Logo.svg'),
+              ),
+            ),
           ),
-          onPressed: () async {
-            getFeedback(context);
-          },
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.help_outline_rounded,
+                color: Color(0xFF143B40),
+                size: 30,
+              ),
+              onPressed: (){
+                getFeedback(context);
+              },
+            )
+          ],
         ),
+        backgroundColor: Colors.white,
         body: Container(
           constraints: BoxConstraints.expand(),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Spacer(),
                 Text(
                   "Scan Documents",
                   style: TextStyle(fontSize: 25),
@@ -203,7 +224,17 @@ class _scanDocState extends State<scanDoc> {
                         ),
                       ),
                     ),
-                  )
+                  ),
+                Spacer(),
+                Text(
+                  'Invalid OTP',
+                  style: TextStyle(
+                      color: error ? Colors.red : Colors.white,
+                      fontFamily: 'Open Sans',
+                      fontWeight: FontWeight.bold
+                  ),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height / 12,)
               ],
             ),
           ),

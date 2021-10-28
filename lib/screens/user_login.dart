@@ -12,6 +12,9 @@ class userLogin extends StatefulWidget {
 String user_aadhar;
 
 class _userLoginState extends State<userLogin> {
+
+  bool error = false;
+
   @override
   Future<int> checkIfDocExists(String docId) async {
     try {
@@ -41,12 +44,29 @@ class _userLoginState extends State<userLogin> {
     return new WillPopScope(
       onWillPop: () async => false,
       child: new Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          toolbarHeight: MediaQuery.of(context).size.height/8,
+          elevation: 0,
+          leadingWidth: MediaQuery.of(context).size.width/4,
+          leading: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Hero(
+              tag: 'logo',
+              child: Image(
+                image: AssetImage('images/Aadhaar_Logo.svg'),
+              ),
+            ),
+          ),
+        ),
+        backgroundColor: Colors.white,
         body: Container(
           constraints: BoxConstraints.expand(),
           decoration: BoxDecoration(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Spacer(),
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -57,7 +77,9 @@ class _userLoginState extends State<userLogin> {
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.start,
                   style: TextStyle(
-                    color: Colors.blue,
+                    color: Colors.black,
+                    fontFamily: 'Open Sans',
+                    fontSize: 20,
                   ),
                   onChanged: (value) {
                     if (value.isEmpty)
@@ -68,8 +90,28 @@ class _userLoginState extends State<userLogin> {
                     }
                   },
                   decoration: InputDecoration(
+                    contentPadding:
+                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                      BorderSide(
+                        // color: Colors.redAccent,
+                          width: 1.0),
+                      borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                      BorderSide(
+                        // color: Colors.redAccent,
+                          width: 2.0),
+                      borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                    ),
+                    filled: true,
                     labelStyle: TextStyle(color: Colors.black, fontSize: 20),
-                    labelText: "Enter User Aadhar Number",
+                    labelText: "User Aadhaar Number",
                   ),
                 ),
               ),
@@ -80,7 +122,7 @@ class _userLoginState extends State<userLogin> {
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
                 alignment: FractionalOffset.center,
-                width: MediaQuery.of(context).size.width / 4,
+                width: MediaQuery.of(context).size.width / 3.5,
                 height: 40,
                 child: FlatButton(
                   onPressed: () async {
@@ -89,18 +131,38 @@ class _userLoginState extends State<userLogin> {
                       addUser(user_aadhar);
                     }
                     if (user_aadhar != null && user_aadhar.length == 12) {
+                      setState(() {
+                        error = false;
+                      });
                       Navigator.pushNamed(context, 'userotp', arguments: step);
+                    }
+                    else{
+                      setState(() {
+                        error = true;
+                      });
                     }
                   },
                   child: Text(
                     "Get OTP",
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontFamily: 'Open Sans',
+                        fontWeight: FontWeight.bold
                     ),
                   ),
                 ),
               ),
+              Spacer(),
+              Text(
+                'Please enter a valid 12 digit Aadhaar Number',
+                style: TextStyle(
+                    color: error ? Colors.red : Colors.white,
+                    fontFamily: 'Open Sans',
+                    fontWeight: FontWeight.bold
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height / 12,)
             ],
           ),
         ),
