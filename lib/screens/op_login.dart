@@ -127,8 +127,12 @@ class _opLoginState extends State<opLogin> {
                 height: 40,
                 child: FlatButton(
                   onPressed: () async {
+<<<<<<< HEAD
                     // bool exists = await checkIfDocExists(op_aadhar);
                     bool exists = true;
+=======
+                    bool exists = true;//await checkIfDocExists(op_aadhar);
+>>>>>>> 8c6e09683a6b715692b50f9a2e0c00e30d201e00
                     if (op_aadhar != null && op_aadhar.length == 12 && exists) {
                       print('Conditions are true.');
                       Map<String, dynamic> responsebody = await getcaptcha();
@@ -231,9 +235,13 @@ class _opLoginState extends State<opLogin> {
                             otpmessage = responsebody["message"];
                           });
                           if (errorcaptcha == false)
+<<<<<<< HEAD
                             Navigator.push(
                               context,
                               //AS A PARAMTER SEND UR ADDRESS for testing, ELSE we will have to send the extracted address i.e script.text
+=======
+                            Navigator.push( context,
+>>>>>>> 8c6e09683a6b715692b50f9a2e0c00e30d201e00
                               MaterialPageRoute(
                                   builder: (context) => opOTP(
                                         aadharno: op_aadhar,
