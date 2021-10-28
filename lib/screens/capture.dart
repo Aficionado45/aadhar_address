@@ -5,12 +5,23 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class capture extends StatefulWidget {
   const capture();
 
   @override
   _captureState createState() => _captureState();
+}
+
+void updateData() {
+  var db = FirebaseFirestore.instance;
+  DateTime curr = DateTime.now();
+  db.collection("ongoing").doc(userRefId).update({
+    "step": 4,
+    "timestamp": curr,
+  });
 }
 
 // Pick image from camera
@@ -242,12 +253,15 @@ class _captureState extends State<capture> {
                     child: FlatButton(
                       onPressed: () async {
                         if (userUploaded && operatorUploaded) {
+
                           setState(() {
                             error = false;
                           });
-                          await uploadImage(userImage, '$user_aadhar/user.png');
+
+                          await uploadImage(userImage, '$userRefId/user.png');
+
                           await uploadImage(
-                              operatorImage, '$user_aadhar/operator.png');
+                              operatorImage, '$userRefId/operator.png');
                           Navigator.pushNamed(context, "confirm");
                         }
                         else{
