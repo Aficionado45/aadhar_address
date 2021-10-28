@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
-var uuid=Uuid();
+
+var uuid = Uuid();
 Future<Map<String, dynamic>> getcaptcha() async {
   final Map<String, dynamic> params = {
     "langCode": "en",
@@ -20,7 +21,7 @@ Future<Map<String, dynamic>> getcaptcha() async {
   return responsebody;
 }
 
-Future<Map<String,dynamic>> getotp(aadharno,captcha,captchatxnid) async {
+Future<Map<String, dynamic>> getotp(aadharno, captcha, captchatxnid) async {
   final uuidno = uuid.v4();
   final Map<String, dynamic> params = {
     //as uid give the uid
@@ -31,37 +32,31 @@ Future<Map<String,dynamic>> getotp(aadharno,captcha,captchatxnid) async {
   };
   var myUri = Uri.parse(
       "https://stage1.uidai.gov.in/unifiedAppAuthService/api/v2/generate/aadhaar/otp");
-  var response = await http
-      .post(myUri, body: json.encode(params), headers: {
+  var response = await http.post(myUri, body: json.encode(params), headers: {
     'x-request-id': '${uuidno}',
     'appid': 'MYAADHAAR',
-    'Accept-Language':'en_in',
+    'Accept-Language': 'en_in',
     'Content-Type': 'application/json'
   });
   Map<String, dynamic> responsebody = json.decode(response.body);
   return responsebody;
 }
 
-Future<bool> validateOTP(String aadharno, String otp, String txnid) async{
+Future<bool> validateOTP(String aadharno, String otp, String txnid) async {
   final Map<String, dynamic> params = {
     'txnNumber': txnid,
-    'otp': int.parse(otp),
+    'otp': otp,
     'shareCode': '0000',
     'uid': aadharno
   };
-  print(otp);
-  print(txnid);
-  var myUri = Uri.parse('https://stage1.uidai.gov.in/eAadhaarService/api/downloadOfflineEkyc');
-  var response = await http.post(myUri, body: json.encode(params), headers: {
-    'Content-Type': 'application/json'
-  });
+  var myUri = Uri.parse(
+      'https://stage1.uidai.gov.in/eAadhaarService/api/downloadOfflineEkyc');
+  var response = await http.post(myUri,
+      body: json.encode(params), headers: {'Content-Type': 'application/json'});
   Map<String, dynamic> responsebody = json.decode(response.body);
-  print(responsebody);
-  if(responsebody['status'] == 'Success'){
+  if (responsebody['status'] == 'Success') {
     return true;
-  }
-
-  else{
+  } else {
     return false;
   }
 }

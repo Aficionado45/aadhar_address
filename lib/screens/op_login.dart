@@ -115,7 +115,8 @@ class _opLoginState extends State<opLogin> {
                     labelText: "Operator Aadhaar Number",
                   ),
                 ),
-              ),  SizedBox(height: 10),
+              ),
+              SizedBox(height: 10),
               Container(
                 decoration: BoxDecoration(
                   color: Color(0xFF143B40),
@@ -126,12 +127,13 @@ class _opLoginState extends State<opLogin> {
                 height: 40,
                 child: FlatButton(
                   onPressed: () async {
-                    bool exists = await checkIfDocExists(op_aadhar);
+                    // bool exists = await checkIfDocExists(op_aadhar);
+                    bool exists = true;
                     if (op_aadhar != null && op_aadhar.length == 12 && exists) {
                       print('Conditions are true.');
                       Map<String, dynamic> responsebody = await getcaptcha();
                       //decoding response
-                      setState((){
+                      setState(() {
                         error = false;
                         print('No errors');
                         print(responsebody.toString());
@@ -185,25 +187,25 @@ class _opLoginState extends State<opLogin> {
                               vertical: 10.0, horizontal: 20.0),
                           border: OutlineInputBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(32.0)),
+                                BorderRadius.all(Radius.circular(32.0)),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              // color: Colors.redAccent,
+                                // color: Colors.redAccent,
                                 width: 1.0),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(32.0)),
+                                BorderRadius.all(Radius.circular(32.0)),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              // color: Colors.redAccent,
+                                // color: Colors.redAccent,
                                 width: 2.0),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(32.0)),
+                                BorderRadius.all(Radius.circular(32.0)),
                           ),
                           filled: true,
                           labelStyle:
-                          TextStyle(color: Colors.black, fontSize: 20),
+                              TextStyle(color: Colors.black, fontSize: 20),
                           labelText: "Enter Captcha",
                         ),
                       ),
@@ -229,12 +231,14 @@ class _opLoginState extends State<opLogin> {
                             otpmessage = responsebody["message"];
                           });
                           if (errorcaptcha == false)
-                            Navigator.push( context,
+                            Navigator.push(
+                              context,
                               //AS A PARAMTER SEND UR ADDRESS for testing, ELSE we will have to send the extracted address i.e script.text
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    opOTP(aadharno:op_aadhar ,txnid:captchatxnid ,)
-                              ),
+                                  builder: (context) => opOTP(
+                                        aadharno: op_aadhar,
+                                        txnid: captchatxnid,
+                                      )),
                             );
                         },
                         child: Text(
@@ -282,7 +286,6 @@ class _opLoginState extends State<opLogin> {
               ),
 
               //captcha views
-
             ],
           ),
         ),
