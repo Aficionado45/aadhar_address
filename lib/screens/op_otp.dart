@@ -89,7 +89,7 @@ class _opOTPState extends State<opOTP> {
                   "Enter OTP",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize:  MediaQuery.of(context).size.width / 30,
                       fontFamily: 'Open Sans',
                       fontWeight: FontWeight.bold
                   ),

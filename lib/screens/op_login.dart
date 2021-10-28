@@ -115,14 +115,14 @@ class _opLoginState extends State<opLogin> {
                   ),
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 10),
               Container(
                 decoration: BoxDecoration(
                   color: Color(0xFF143B40),
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
                 alignment: FractionalOffset.center,
-                width: MediaQuery.of(context).size.width / 4,
+                width: MediaQuery.of(context).size.width / 3,
                 height: 40,
                 child: FlatButton(
                   onPressed: () async {
@@ -157,12 +157,101 @@ class _opLoginState extends State<opLogin> {
                     "Get Captcha",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: MediaQuery.of(context).size.width / 30,
                         fontFamily: 'Open Sans',
                         fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
+              SizedBox(height: 30),
+              if (captchaimage != null)
+                Column(
+                  children: [
+                    captchaimage,
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                      width: MediaQuery.of(context).size.width / 1.3,
+                      height: MediaQuery.of(context).size.height / 13.6,
+                      child: TextFormField(
+                        controller: captchafield,
+                        style: TextStyle(color: Colors.black, fontSize: 16),
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                // color: Colors.redAccent,
+                                width: 1.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                // color: Colors.redAccent,
+                                width: 2.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
+                          ),
+                          filled: true,
+                          labelStyle:
+                              TextStyle(color: Colors.black, fontSize: 20),
+                          labelText: "Enter Captcha",
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xFF143B40),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                      alignment: FractionalOffset.center,
+                      width: MediaQuery.of(context).size.width / 3,
+                      height: 40,
+                      child: FlatButton(
+                        onPressed: () async {
+                          Map<String, dynamic> responsebody = await getotp(
+                              op_aadhar, captchafield.text, captchatxnid);
+                          print(responsebody);
+                          setState(() {
+                            responsebody["message"] == "Invalid Captcha"
+                                ? errorcaptcha = true
+                                : errorcaptcha = false;
+                            otpmessage = responsebody["message"];
+                          });
+                          if (errorcaptcha == false)
+                            Navigator.pushNamed(context, 'opotp');
+                        },
+                        child: Text(
+                          "Verify Captcha",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: MediaQuery.of(context).size.width / 35,
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    // FlatButton(
+                    //   onPressed: () async {
+                    //     Navigator.pushNamed(context, 'opotp');
+                    //   },
+                    //   child: Text(
+                    //     "move to next screen",
+                    //     style: TextStyle(
+                    //       color: Colors.black,
+                    //       fontSize: 20,
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                ),
               Spacer(),
               Text(
                 'Please enter a valid 12 digit Aadhaar Number',
@@ -184,72 +273,6 @@ class _opLoginState extends State<opLogin> {
               ),
 
               //captcha views
-
-              if (captchaimage != null)
-                Column(
-                  children: [
-                    captchaimage,
-                    TextFormField(
-                      controller: captchafield,
-                      style: TextStyle(color: Colors.black, fontSize: 16),
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 20.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              // color: Colors.redAccent,
-                              width: 1.0),
-                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              // color: Colors.redAccent,
-                              width: 2.0),
-                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                        ),
-                        filled: true,
-                        labelStyle:
-                            TextStyle(color: Colors.black, fontSize: 20),
-                        labelText: "Enter Captcha",
-                      ),
-                    ),
-                    FlatButton(
-                      onPressed: () async {
-                        Map<String, dynamic> responsebody = await getotp(
-                            op_aadhar, captchafield.text, captchatxnid);
-                        print(responsebody);
-                        setState(() {
-                          responsebody["message"] == "Invalid Captcha"
-                              ? errorcaptcha = true
-                              : errorcaptcha = false;
-                          otpmessage = responsebody["message"];
-                        });
-                      },
-                      child: Text(
-                        "Verify Captcha",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                    FlatButton(
-                      onPressed: () async {
-                        Navigator.pushNamed(context, 'opotp');
-                      },
-                      child: Text(
-                        "move to next screen",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ],
-                )
             ],
           ),
         ),

@@ -55,7 +55,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       "Get Started",
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: MediaQuery.of(context).size.width/30,
                           fontFamily: 'Open Sans',
                           fontWeight: FontWeight.bold
                       ),

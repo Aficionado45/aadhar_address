@@ -115,9 +115,10 @@ class _userOTPState extends State<userOTP> {
                   "Enter OTP",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize:  MediaQuery.of(context).size.width / 30,
                       fontFamily: 'Open Sans',
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.bold
+                  ),
                 ),
               ),
             ),
