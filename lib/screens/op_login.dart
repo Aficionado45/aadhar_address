@@ -14,11 +14,11 @@ class opLogin extends StatefulWidget {
   _opLoginState createState() => _opLoginState();
 }
 
+String op_aadhar;
 String opRefId;
 
 class _opLoginState extends State<opLogin> {
   @override
-  String op_aadhar;
 
   Future<bool> checkIfDocExists(String docId) async {
     try {
@@ -30,16 +30,36 @@ class _opLoginState extends State<opLogin> {
     }
   }
 
+  bool error = false;
+
   Widget build(BuildContext context) {
+
     return new WillPopScope(
       onWillPop: () async => false,
       child: new Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          toolbarHeight: MediaQuery.of(context).size.height/8,
+          elevation: 0,
+          leadingWidth: MediaQuery.of(context).size.width/4,
+          leading: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Hero(
+              tag: 'logo',
+              child: Image(
+                image: AssetImage('images/Aadhaar_Logo.svg'),
+              ),
+            ),
+          ),
+        ),
+        backgroundColor: Colors.white,
         body: Container(
           constraints: BoxConstraints.expand(),
           decoration: BoxDecoration(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Spacer(),
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -47,10 +67,13 @@ class _opLoginState extends State<opLogin> {
                 width: MediaQuery.of(context).size.width / 1.3,
                 height: MediaQuery.of(context).size.height / 13.6,
                 child: TextField(
+                  // maxLength: 12,
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.start,
                   style: TextStyle(
-                    color: Colors.blue,
+                    color: Colors.black,
+                    fontFamily: 'Open Sans',
+                    fontSize: 20,
                   ),
                   onChanged: (value) {
                     if (value.isEmpty)
@@ -60,8 +83,28 @@ class _opLoginState extends State<opLogin> {
                     }
                   },
                   decoration: InputDecoration(
+                    contentPadding:
+                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                      BorderSide(
+                        // color: Colors.redAccent,
+                          width: 1.0),
+                      borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                      BorderSide(
+                        // color: Colors.redAccent,
+                          width: 2.0),
+                      borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                    ),
+                    filled: true,
                     labelStyle: TextStyle(color: Colors.black, fontSize: 20),
-                    labelText: "Enter Operator Aadhar Number",
+                    labelText: "Operator Aadhaar Number",
                   ),
                 ),
               ),
@@ -78,13 +121,24 @@ class _opLoginState extends State<opLogin> {
                   onPressed: () async {
                     bool exists = await checkIfDocExists(op_aadhar);
                     if (op_aadhar != null && op_aadhar.length == 12 && exists) {
+
+                      setState(() {
+                        error = false;
+                      });
+
                       var bytes = utf8.encode(op_aadhar);
                       var digest = sha1.convert(bytes);
                       opRefId = digest.toString();
                       opRefId = opRefId.substring(0, 10);
-                      op_aadhar = null;
+                      // op_aadhar = null;
                       print("Operator Ref ID: $opRefId");
+
                       Navigator.pushNamed(context, 'opotp');
+                    }
+                    else{
+                      setState(() {
+                        error = true;
+                      });
                     }
                     Uri myUri = Uri.parse(
                         "https://otp-stage.uidai.gov.in/uidotpserver/2.5/public/9/9/MEY2cG1nhC02dzj6hnqyKN2A1u6U0LcLAYaPBaLI-3qE-FtthtweGuk");
@@ -122,10 +176,22 @@ class _opLoginState extends State<opLogin> {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
+                      fontFamily: 'Open Sans',
+                      fontWeight: FontWeight.bold
                     ),
                   ),
                 ),
               ),
+              Spacer(),
+              Text(
+                'Please enter a valid 12 digit Aadhaar Number',
+                style: TextStyle(
+                  color: error ? Colors.red : Colors.white,
+                  fontFamily: 'Open Sans',
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height / 12,)
             ],
           ),
         ),

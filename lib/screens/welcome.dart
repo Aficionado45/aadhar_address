@@ -17,14 +17,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image(
-                  image: AssetImage('images/Aadhaar_Logo.svg'),
-                  height: MediaQuery.of(context).size.height / 4,
+                Hero(
+                  tag: 'logo',
+                  child: Image(
+                    image: AssetImage('images/Aadhaar_Logo.svg'),
+                    height: MediaQuery.of(context).size.height / 4,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
                 ),
                 Center(
                   child: Text('Aadhaar Address App',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 30,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Zen'
                         // fontFamily: 'Open Sans'
@@ -39,7 +45,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
                   alignment: FractionalOffset.center,
-                  width: 110,
+                  width: MediaQuery.of(context).size.width / 2.5,
                   height: 40,
                   child: FlatButton(
                     onPressed: () {
@@ -48,8 +54,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     child: Text(
                       "Get Started",
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontFamily: 'Open Sans',
+                          fontWeight: FontWeight.bold
                       ),
                     ),
                   ),

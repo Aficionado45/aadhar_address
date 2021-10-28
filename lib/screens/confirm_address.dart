@@ -22,15 +22,34 @@ class _cnfrmAddressState extends State<cnfrmAddress> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xFF143B40),
-        child: Icon(
-          Icons.help_outline_rounded,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        toolbarHeight: MediaQuery.of(context).size.height/8,
+        elevation: 0,
+        leadingWidth: MediaQuery.of(context).size.width/4,
+        leading: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Hero(
+            tag: 'logo',
+            child: Image(
+              image: AssetImage('images/Aadhaar_Logo.svg'),
+            ),
+          ),
         ),
-        onPressed: () async {
-          getFeedback(context);
-        },
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.help_outline_rounded,
+              color: Color(0xFF143B40),
+              size: 30,
+            ),
+            onPressed: (){
+              getFeedback(context);
+            },
+          )
+        ],
       ),
+      backgroundColor: Colors.white,
       body: Center(
         child: Container(
           child: Column(
