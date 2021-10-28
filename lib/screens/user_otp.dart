@@ -1,3 +1,4 @@
+import 'package:aadhar_address/services/authentication_methods.dart';
 import 'package:aadhar_address/utils/feedback_form.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_field.dart';
@@ -5,7 +6,10 @@ import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
 
 class userOTP extends StatefulWidget {
-  const userOTP();
+  const userOTP({this.aadharno, this.txnid, this.step});
+
+  final String txnid, aadharno;
+  final int step;
 
   @override
   _userOTPState createState() => _userOTPState();
@@ -17,7 +21,7 @@ class _userOTPState extends State<userOTP> {
   bool error = false;
 
   Widget build(BuildContext context) {
-    final step = ModalRoute.of(context).settings.arguments;
+    // final step = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
       appBar: AppBar(
@@ -83,27 +87,36 @@ class _userOTPState extends State<userOTP> {
               width: MediaQuery.of(context).size.width / 3.0,
               height: 40,
               child: FlatButton(
-                onPressed: () {
+                onPressed: () async {
                   if (otp != null) {
-                    print(step);
+                    print(widget.step);
                     setState(() {
                       error = false;
                     });
-                    switch (3) {
-                      case 0:
-                        Navigator.pushNamed(context, 'scan');
-                        break;
-                      case 1:
-                        Navigator.pushNamed(context, 'scan');
-                        break;
-                      case 2:
-                        Navigator.pushNamed(context, 'form');
-                        break;
-                      case 3:
-                        Navigator.pushNamed(context, 'capture');
-                        break;
-                      case 4:
-                        Navigator.pushNamed(context, 'confirm');
+                    bool isValidated =
+                        await validateOTP(widget.aadharno, otp, widget.txnid);
+                    print(isValidated);
+                    if (isValidated) {
+                      switch (3) {
+                        case 0:
+                          Navigator.pushNamed(context, 'scan');
+                          break;
+                        case 1:
+                          Navigator.pushNamed(context, 'scan');
+                          break;
+                        case 2:
+                          Navigator.pushNamed(context, 'form');
+                          break;
+                        case 3:
+                          Navigator.pushNamed(context, 'capture');
+                          break;
+                        case 4:
+                          Navigator.pushNamed(context, 'confirm');
+                      }
+                    } else {
+                      setState(() {
+                        error = true;
+                      });
                     }
                   } else {
                     setState(() {
@@ -115,10 +128,9 @@ class _userOTPState extends State<userOTP> {
                   "Enter OTP",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize:  MediaQuery.of(context).size.width / 30,
+                      fontSize: MediaQuery.of(context).size.width / 30,
                       fontFamily: 'Open Sans',
-                      fontWeight: FontWeight.bold
-                  ),
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -139,7 +151,6 @@ class _userOTPState extends State<userOTP> {
     );
   }
 }
-
 
 //TODO: Improve UI
 //Wrong OTP and resend

@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 
 var uuid = Uuid();
+
 Future<Map<String, dynamic>> getcaptcha() async {
   final Map<String, dynamic> params = {
     "langCode": "en",
@@ -21,8 +22,8 @@ Future<Map<String, dynamic>> getcaptcha() async {
   return responsebody;
 }
 
-Future<Map<String, dynamic>> getotp(aadharno, captcha, captchatxnid) async {
-  final uuidno = uuid.v4();
+Future<Map<String, dynamic>> getotp(
+    uuidno, aadharno, captcha, captchatxnid) async {
   final Map<String, dynamic> params = {
     //as uid give the uid
     "uidNumber": "${aadharno}",
@@ -44,17 +45,19 @@ Future<Map<String, dynamic>> getotp(aadharno, captcha, captchatxnid) async {
 
 Future<bool> validateOTP(String aadharno, String otp, String txnid) async {
   final Map<String, dynamic> params = {
-    'txnNumber': txnid,
+    'txnId': txnid,
     'otp': otp,
-    'shareCode': '0000',
     'uid': aadharno
   };
-  var myUri = Uri.parse(
-      'https://stage1.uidai.gov.in/eAadhaarService/api/downloadOfflineEkyc');
+  print(aadharno);
+  print(otp);
+  print(txnid);
+  var myUri = Uri.parse('https://stage1.uidai.gov.in/onlineekyc/getAuth/');
   var response = await http.post(myUri,
       body: json.encode(params), headers: {'Content-Type': 'application/json'});
   Map<String, dynamic> responsebody = json.decode(response.body);
-  if (responsebody['status'] == 'Success') {
+  print(responsebody);
+  if (responsebody['status'] == 'y') {
     return true;
   } else {
     return false;

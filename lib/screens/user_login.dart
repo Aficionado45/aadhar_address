@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:aadhar_address/screens/user_otp.dart';
 import 'package:aadhar_address/services/authentication_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,14 +18,15 @@ class userLogin extends StatefulWidget {
 String userRefId;
 
 class _userLoginState extends State<userLogin> {
-
   bool error = false;
   Image captchaimage;
   var captchatxnid;
   String otpmessage;
-  TextEditingController captchafield = new TextEditingController();  bool errorcaptcha = false;
+  TextEditingController captchafield = new TextEditingController();
+  bool errorcaptcha = false;
   @override
   String user_aadhar;
+
   Future<int> checkIfDocExists(String docId) async {
     try {
       var collectionRef = FirebaseFirestore.instance.collection('ongoing');
@@ -44,7 +46,6 @@ class _userLoginState extends State<userLogin> {
     var digest = sha1.convert(bytes);
     userRefId = digest.toString();
     userRefId = userRefId.substring(0, 10);
-    user_aadhar = null;
     print("User Ref ID: $userRefId");
   }
 
@@ -64,9 +65,9 @@ class _userLoginState extends State<userLogin> {
       child: new Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          toolbarHeight: MediaQuery.of(context).size.height/8,
+          toolbarHeight: MediaQuery.of(context).size.height / 8,
           elevation: 0,
-          leadingWidth: MediaQuery.of(context).size.width/4,
+          leadingWidth: MediaQuery.of(context).size.width / 4,
           leading: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Hero(
@@ -109,21 +110,19 @@ class _userLoginState extends State<userLogin> {
                   },
                   decoration: InputDecoration(
                     contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide:
-                      BorderSide(
-                        // color: Colors.redAccent,
+                      borderSide: BorderSide(
+                          // color: Colors.redAccent,
                           width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide:
-                      BorderSide(
-                        // color: Colors.redAccent,
+                      borderSide: BorderSide(
+                          // color: Colors.redAccent,
                           width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
@@ -150,10 +149,10 @@ class _userLoginState extends State<userLogin> {
                       setState(() {
                         error = false;
                         var captchaBase64String =
-                        responsebody["captchaBase64String"];
+                            responsebody["captchaBase64String"];
                         captchatxnid = responsebody["captchaTxnId"];
                         Uint8List bytes =
-                        Base64Decoder().convert(captchaBase64String);
+                            Base64Decoder().convert(captchaBase64String);
                         captchaimage = Image.memory(bytes);
                       });
                       setState(() {
@@ -161,14 +160,11 @@ class _userLoginState extends State<userLogin> {
                       });
 
                       // Navigator.pushNamed(context, 'userotp', arguments: step);
-                    }
-                    else{
+                    } else {
                       setState(() {
                         error = true;
                       });
                     }
-                    
-
                   },
                   child: Text(
                     "Get Captcha",
@@ -199,25 +195,25 @@ class _userLoginState extends State<userLogin> {
                               vertical: 10.0, horizontal: 20.0),
                           border: OutlineInputBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(32.0)),
+                                BorderRadius.all(Radius.circular(32.0)),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              // color: Colors.redAccent,
+                                // color: Colors.redAccent,
                                 width: 1.0),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(32.0)),
+                                BorderRadius.all(Radius.circular(32.0)),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              // color: Colors.redAccent,
+                                // color: Colors.redAccent,
                                 width: 2.0),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(32.0)),
+                                BorderRadius.all(Radius.circular(32.0)),
                           ),
                           filled: true,
                           labelStyle:
-                          TextStyle(color: Colors.black, fontSize: 20),
+                              TextStyle(color: Colors.black, fontSize: 20),
                           labelText: "Enter Captcha",
                         ),
                       ),
@@ -233,24 +229,35 @@ class _userLoginState extends State<userLogin> {
                       height: 40,
                       child: FlatButton(
                         onPressed: () async {
+                          final uuidno = uuid.v4();
                           Map<String, dynamic> responsebody = await getotp(
-                              user_aadhar, captchafield.text, captchatxnid);
+                              uuidno,
+                              user_aadhar,
+                              captchafield.text,
+                              captchatxnid);
                           print(responsebody);
                           setState(() {
-                            responsebody["message"] == "Invalid Captcha"
-                                ? errorcaptcha = true
-                                : errorcaptcha = false;
+                            responsebody["message"] ==
+                                    "OTP generation done successfully"
+                                ? errorcaptcha = false
+                                : errorcaptcha = true;
                             otpmessage = responsebody["message"];
                           });
-                          if (errorcaptcha == false){
+                          if (errorcaptcha == false) {
                             generateRefID();
                             int step = await checkIfDocExists(userRefId);
                             if (step == 0) {
                               addUser(userRefId);
                             }
-                            Navigator.pushNamed(context, 'userotp', arguments: step);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    userOTP(aadharno:user_aadhar,txnid: responsebody["txnId"],step:step),
+                              ),
+                            );
+                            user_aadhar = null;
                           }
-
                         },
                         child: Text(
                           "Verify Captcha",
@@ -282,10 +289,11 @@ class _userLoginState extends State<userLogin> {
                 style: TextStyle(
                     color: error ? Colors.red : Colors.white,
                     fontFamily: 'Open Sans',
-                    fontWeight: FontWeight.bold
-                ),
+                    fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height / 12,)
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 12,
+              )
             ],
           ),
         ),
@@ -294,7 +302,6 @@ class _userLoginState extends State<userLogin> {
   }
 }
 
-
 //TODO: Improve UI
-//Error for wrong input format less than 12 digits 
+//Error for wrong input format less than 12 digits
 //Auth API integration
