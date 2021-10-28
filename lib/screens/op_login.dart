@@ -20,11 +20,12 @@ class opLogin extends StatefulWidget {
 
 String op_aadhar;
 String opRefId;
+var captchatxnid;
 
 class _opLoginState extends State<opLogin> {
   @override
   Image captchaimage;
-  var captchatxnid;
+
   var uuid = Uuid();
   String otpmessage;
   TextEditingController captchafield = new TextEditingController();
