@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 class userLogin extends StatefulWidget {
   const userLogin();
@@ -9,10 +11,11 @@ class userLogin extends StatefulWidget {
   _userLoginState createState() => _userLoginState();
 }
 
-String user_aadhar;
+String userRefId;
 
 class _userLoginState extends State<userLogin> {
   @override
+  String user_aadhar;
   Future<int> checkIfDocExists(String docId) async {
     try {
       var collectionRef = FirebaseFirestore.instance.collection('ongoing');
@@ -27,12 +30,21 @@ class _userLoginState extends State<userLogin> {
     }
   }
 
+  void generateRefID() {
+    var bytes = utf8.encode(user_aadhar);
+    var digest = sha1.convert(bytes);
+    userRefId = digest.toString();
+    userRefId = userRefId.substring(0, 10);
+    user_aadhar = null;
+    print("User Ref ID: $userRefId");
+  }
+
   void addUser(String id) {
     var db = FirebaseFirestore.instance;
     DateTime curr = DateTime.now();
     db.collection("ongoing").doc(id).set({
       "step": 1,
-      "aadhar": id,
+      "tramsactionID": id,
       "timestamp": curr,
     });
   }
@@ -84,13 +96,14 @@ class _userLoginState extends State<userLogin> {
                 height: 40,
                 child: FlatButton(
                   onPressed: () async {
-                    int step = await checkIfDocExists(user_aadhar);
-                    if (step == 0) {
-                      addUser(user_aadhar);
-                    }
                     if (user_aadhar != null && user_aadhar.length == 12) {
-                      Navigator.pushNamed(context, 'userotp', arguments: step);
+                      generateRefID();
                     }
+                    int step = await checkIfDocExists(userRefId);
+                    if (step == 0) {
+                      addUser(userRefId);
+                    }
+                    Navigator.pushNamed(context, 'userotp', arguments: step);
                   },
                   child: Text(
                     "Get OTP",

@@ -2,6 +2,9 @@ import 'package:aadhar_address/services/locationmethods.dart';
 import 'package:aadhar_address/utils/feedback_form.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:aadhar_address/screens/user_login.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum AppState { free, comparedlocation, unsuccessful }
 
@@ -14,10 +17,12 @@ class editForm extends StatefulWidget {
   _editFormState createState() => _editFormState();
 }
 
+String modifiedAdd;
+String pin;
+
 class _editFormState extends State<editForm> {
   //address.text contains address
   //pinfield.text contains pin code
-
   TextEditingController addressfield = new TextEditingController();
   TextEditingController pinfield = new TextEditingController();
   AppState state = AppState.free;
@@ -30,6 +35,19 @@ class _editFormState extends State<editForm> {
   @override
   void initState() {
     addressfield.text = widget.address;
+  }
+
+  void updateData() {
+    var db = FirebaseFirestore.instance;
+    DateTime curr = DateTime.now();
+    db.collection("ongoing").doc(userRefId).update({
+      "step": 3,
+      "timestamp": curr,
+    });
+    db.collection("ongoing").doc(userRefId).set({
+      "updated_address": modifiedAdd,
+      "pincode": pin,
+    });
   }
 
   @override
@@ -62,6 +80,7 @@ class _editFormState extends State<editForm> {
                   maxLines: 100,
                   style: TextStyle(color: Colors.black, fontSize: 16),
                   onChanged: (val) {
+                    modifiedAdd = val;
                     setState(() {});
                   },
                   decoration: new InputDecoration(
@@ -80,6 +99,7 @@ class _editFormState extends State<editForm> {
                   readOnly: !editable,
                   style: TextStyle(color: Colors.black, fontSize: 16),
                   onChanged: (val) {
+                    pin = val;
                     setState(() {});
                   },
                   keyboardType: TextInputType.number,
@@ -117,7 +137,8 @@ class _editFormState extends State<editForm> {
                               await getlocation(widget.address);
                           print(_distanceinmeters);
                           setState(() {
-                            state = _distanceinmeters > 300&&_distanceinmeters2>300
+                            state = _distanceinmeters > 300 &&
+                                    _distanceinmeters2 > 300
                                 ? AppState.unsuccessful
                                 : AppState.comparedlocation;
                             editable = false;
@@ -143,6 +164,7 @@ class _editFormState extends State<editForm> {
                         height: 40,
                         child: FlatButton(
                           onPressed: () {
+                            updateData();
                             Navigator.pushNamed(context, 'capture');
                           },
                           child: Text(
@@ -186,12 +208,12 @@ class _editFormState extends State<editForm> {
                     "Discrepancy: $_distanceinmeters meters",
                     textAlign: TextAlign.center,
                   ),
-                if (state == AppState.unsuccessful && _distanceinmeters>300)
+                if (state == AppState.unsuccessful && _distanceinmeters > 300)
                   Text(
                     "The Distance between the address you edited in the textfield and the address otained from GPS is more than 300 metres. Reset and try again",
                     textAlign: TextAlign.center,
                   ),
-                if (state == AppState.unsuccessful && _distanceinmeters2>300)
+                if (state == AppState.unsuccessful && _distanceinmeters2 > 300)
                   Text(
                     "The Distance between the address received from OCR extraction and the address otained from GPS is more than 300 metres. Reset and try again",
                     textAlign: TextAlign.center,

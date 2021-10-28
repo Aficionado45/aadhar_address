@@ -8,6 +8,8 @@ import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum AppState { free, picked, cropped, extracted }
 
@@ -26,6 +28,20 @@ class _scanDocState extends State<scanDoc> {
   File _initialImage;
   TextEditingController script = TextEditingController();
   final picker = ImagePicker();
+
+  void updateData() {
+    var db = FirebaseFirestore.instance;
+    DateTime curr = DateTime.now();
+    db.collection("ongoing").doc(userRefId).update({
+      "step": 2,
+      "timestamp": curr,
+    });
+    db.collection("ongoing").doc(userRefId).set({
+      "scanned_address": "Provide Scanned Variable",
+      "step": 2,
+      "timestamp": curr,
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,24 +98,24 @@ class _scanDocState extends State<scanDoc> {
                     ),
                   ),
                 if (state == AppState.free)
-                Padding(
-                    padding: const EdgeInsets.all(32.0),
-                    child: Container(
-                      padding: const EdgeInsets.all(10.0),
-                      height: MediaQuery.of(context).size.height / 2,
-                      width: MediaQuery.of(context).size.width,
-                      child: Card(
-                          color: Colors.grey,
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("Capture and upload a document",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 30)),
-                                Icon(Icons.camera),
-                              ])),
-                    )),
+                  Padding(
+                      padding: const EdgeInsets.all(32.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(10.0),
+                        height: MediaQuery.of(context).size.height / 2,
+                        width: MediaQuery.of(context).size.width,
+                        child: Card(
+                            color: Colors.grey,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("Capture and upload a document",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 30)),
+                                  Icon(Icons.camera),
+                                ])),
+                      )),
                 SizedBox(height: 20),
                 SizedBox(height: 10),
                 SizedBox(height: 10),
@@ -184,7 +200,9 @@ class _scanDocState extends State<scanDoc> {
                     child: FlatButton(
                       onPressed: () async {
                         //Line is commented out for testing
-                        // await uploadImage(_initialImage, '$user_aadhar/document.png');
+                        await uploadImage(
+                            _initialImage, '$userRefId/document.png');
+                        updateData();
                         Navigator.push(
                           context,
                           //AS A PARAMTER SEND UR ADDRESS for testing, ELSE we will have to send the extracted address i.e script.text
@@ -300,3 +318,4 @@ class _scanDocState extends State<scanDoc> {
 
 //TODO: Impprove UI
 //OCR Integration
+//Line 40

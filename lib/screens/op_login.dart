@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:aadhar_address/screens/op_otp.dart';
 import 'package:xml/xml.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 class opLogin extends StatefulWidget {
   const opLogin();
@@ -11,6 +13,8 @@ class opLogin extends StatefulWidget {
   @override
   _opLoginState createState() => _opLoginState();
 }
+
+String opRefId;
 
 class _opLoginState extends State<opLogin> {
   @override
@@ -74,6 +78,12 @@ class _opLoginState extends State<opLogin> {
                   onPressed: () async {
                     bool exists = await checkIfDocExists(op_aadhar);
                     if (op_aadhar != null && op_aadhar.length == 12 && exists) {
+                      var bytes = utf8.encode(op_aadhar);
+                      var digest = sha1.convert(bytes);
+                      opRefId = digest.toString();
+                      opRefId = opRefId.substring(0, 10);
+                      op_aadhar = null;
+                      print("Operator Ref ID: $opRefId");
                       Navigator.pushNamed(context, 'opotp');
                     }
                     Uri myUri = Uri.parse(
@@ -102,8 +112,7 @@ class _opLoginState extends State<opLogin> {
         </KeyInfo>
     </Signature>
 </ns2:Otp>''';
-                    var response =
-                        await http.post(myUri, body: data, headers: {
+                    var response = await http.post(myUri, body: data, headers: {
                       'Content-type': 'text/xml',
                     });
                     print(response.body);

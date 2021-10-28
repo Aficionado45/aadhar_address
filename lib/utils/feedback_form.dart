@@ -6,9 +6,9 @@ Future<void> submitFeedback(String feedback) async {
   DateTime timestamp = DateTime.now();
   await FirebaseFirestore.instance
       .collection('feedbacks')
-      .doc('$user_aadhar' + '_' + '${timestamp.toString()}')
+      .doc('$userRefId' + '_' + '${timestamp.toString()}')
       .set({
-    'reference_id': user_aadhar,
+    'reference_id': userRefId,
     'timestamp': timestamp.toString(),
     'feedback': feedback,
   });
