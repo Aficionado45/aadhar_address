@@ -22,9 +22,9 @@ class _userOTPState extends State<userOTP> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        toolbarHeight: MediaQuery.of(context).size.height/8,
+        toolbarHeight: MediaQuery.of(context).size.height / 8,
         elevation: 0,
-        leadingWidth: MediaQuery.of(context).size.width/4,
+        leadingWidth: MediaQuery.of(context).size.width / 4,
         leading: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Hero(
@@ -41,7 +41,7 @@ class _userOTPState extends State<userOTP> {
               color: Color(0xFF143B40),
               size: 30,
             ),
-            onPressed: (){
+            onPressed: () {
               getFeedback(context);
             },
           )
@@ -62,8 +62,7 @@ class _userOTPState extends State<userOTP> {
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Open Sans'
-                ),
+                    fontFamily: 'Open Sans'),
                 textFieldAlignment: MainAxisAlignment.spaceAround,
                 fieldWidth: MediaQuery.of(context).size.width / 10,
                 fieldStyle: FieldStyle.underline,
@@ -72,9 +71,7 @@ class _userOTPState extends State<userOTP> {
                   print("Completed: " + pin);
                 },
                 otpFieldStyle: OtpFieldStyle(
-                    borderColor: Colors.grey,
-                    focusBorderColor: Colors.black
-                ),
+                    borderColor: Colors.grey, focusBorderColor: Colors.black),
               ),
             ),
             Container(
@@ -92,7 +89,7 @@ class _userOTPState extends State<userOTP> {
                     setState(() {
                       error = false;
                     });
-                    switch (3) {
+                    switch (step) {
                       case 0:
                         Navigator.pushNamed(context, 'scan');
                         break;
@@ -108,8 +105,7 @@ class _userOTPState extends State<userOTP> {
                       case 4:
                         Navigator.pushNamed(context, 'confirm');
                     }
-                  }
-                  else{
+                  } else {
                     setState(() {
                       error = true;
                     });
@@ -121,8 +117,7 @@ class _userOTPState extends State<userOTP> {
                       color: Colors.white,
                       fontSize: 20,
                       fontFamily: 'Open Sans',
-                      fontWeight: FontWeight.bold
-                  ),
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -132,10 +127,11 @@ class _userOTPState extends State<userOTP> {
               style: TextStyle(
                   color: error ? Colors.red : Colors.white,
                   fontFamily: 'Open Sans',
-                  fontWeight: FontWeight.bold
-              ),
+                  fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height / 12,)
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 12,
+            )
           ],
         ),
       ),

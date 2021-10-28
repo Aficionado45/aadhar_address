@@ -20,6 +20,8 @@ class scanDoc extends StatefulWidget {
   _scanDocState createState() => _scanDocState();
 }
 
+String address;
+
 class _scanDocState extends State<scanDoc> {
   AppState state;
   File _image;
@@ -32,13 +34,14 @@ class _scanDocState extends State<scanDoc> {
 
   void updateData() {
     var db = FirebaseFirestore.instance;
+    address = script.text;
     DateTime curr = DateTime.now();
     db.collection("ongoing").doc(userRefId).update({
       "step": 2,
       "timestamp": curr,
     });
     db.collection("ongoing").doc(userRefId).set({
-      "scanned_address": "Provide Scanned Variable",
+      "scanned_address": address,
       "step": 2,
       "timestamp": curr,
     });
@@ -51,9 +54,9 @@ class _scanDocState extends State<scanDoc> {
       child: new Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          toolbarHeight: MediaQuery.of(context).size.height/8,
+          toolbarHeight: MediaQuery.of(context).size.height / 8,
           elevation: 0,
-          leadingWidth: MediaQuery.of(context).size.width/4,
+          leadingWidth: MediaQuery.of(context).size.width / 4,
           leading: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Hero(
@@ -70,7 +73,7 @@ class _scanDocState extends State<scanDoc> {
                 color: Color(0xFF143B40),
                 size: 30,
               ),
-              onPressed: (){
+              onPressed: () {
                 getFeedback(context);
               },
             )
@@ -249,10 +252,11 @@ class _scanDocState extends State<scanDoc> {
                   style: TextStyle(
                       color: error ? Colors.red : Colors.white,
                       fontFamily: 'Open Sans',
-                      fontWeight: FontWeight.bold
-                  ),
+                      fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height / 12,)
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 12,
+                )
               ],
             ),
           ),

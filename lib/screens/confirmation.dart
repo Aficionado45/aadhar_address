@@ -19,9 +19,9 @@ class _confirmState extends State<confirm> {
       child: new Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          toolbarHeight: MediaQuery.of(context).size.height/8,
+          toolbarHeight: MediaQuery.of(context).size.height / 8,
           elevation: 0,
-          leadingWidth: MediaQuery.of(context).size.width/4,
+          leadingWidth: MediaQuery.of(context).size.width / 4,
           leading: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Hero(
@@ -38,7 +38,7 @@ class _confirmState extends State<confirm> {
                 color: Color(0xFF143B40),
                 size: 30,
               ),
-              onPressed: (){
+              onPressed: () {
                 getFeedback(context);
               },
             )
@@ -58,7 +58,7 @@ class _confirmState extends State<confirm> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                          "Address Update Confirmation",
+                        "Address Update Confirmation",
                         style: TextStyle(
                           fontFamily: 'Open Sans',
                           fontWeight: FontWeight.bold,
@@ -81,56 +81,60 @@ class _confirmState extends State<confirm> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              child: Text(
+                              /* child: Text(
                                 'User Aadhaar No: $user_aadhar',
                                 style: TextStyle(
                                   fontFamily: 'Open Sans',
                                   fontWeight: FontWeight.bold
                                 ),
-                              ),
+                              ),*/
                               width: MediaQuery.of(context).size.width * 0.6,
                             ),
-                            SizedBox(height: 20,),
+                            SizedBox(
+                              height: 20,
+                            ),
                             Container(
                               child: Text(
                                 'Operator Aadhaar No: XXXXXXXX${op_aadhar.substring(8)}',
                                 style: TextStyle(
                                     fontFamily: 'Open Sans',
-                                    fontWeight: FontWeight.bold
-                                ),
+                                    fontWeight: FontWeight.bold),
                               ),
                               width: MediaQuery.of(context).size.width * 0.6,
                             ),
-                            SizedBox(height: 20,),
+                            SizedBox(
+                              height: 20,
+                            ),
                             Container(
                               child: Text(
                                 'Date of update: ${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}',
                                 style: TextStyle(
                                     fontFamily: 'Open Sans',
-                                    fontWeight: FontWeight.bold
-                                ),
+                                    fontWeight: FontWeight.bold),
                               ),
                               width: MediaQuery.of(context).size.width * 0.6,
                             ),
-                            SizedBox(height: 20,),
+                            SizedBox(
+                              height: 20,
+                            ),
                             Container(
                               child: Text(
                                 'Captured Address: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
                                 style: TextStyle(
                                     fontFamily: 'Open Sans',
-                                    fontWeight: FontWeight.bold
-                                ),
+                                    fontWeight: FontWeight.bold),
                               ),
                               width: MediaQuery.of(context).size.width * 0.6,
                             ),
-                            SizedBox(height: 20,),
+                            SizedBox(
+                              height: 20,
+                            ),
                             Container(
                               child: Text(
                                 'Modified Address: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
                                 style: TextStyle(
                                     fontFamily: 'Open Sans',
-                                    fontWeight: FontWeight.bold
-                                ),
+                                    fontWeight: FontWeight.bold),
                               ),
                               width: MediaQuery.of(context).size.width * 0.6,
                             ),
@@ -150,8 +154,7 @@ class _confirmState extends State<confirm> {
                               'User',
                               style: TextStyle(
                                   fontFamily: 'Open Sans',
-                                  fontWeight: FontWeight.bold
-                              ),
+                                  fontWeight: FontWeight.bold),
                             ),
                             Image(
                               image: FileImage(
@@ -159,13 +162,14 @@ class _confirmState extends State<confirm> {
                               ),
                               width: MediaQuery.of(context).size.width / 5,
                             ),
-                            SizedBox(height: 10,),
+                            SizedBox(
+                              height: 10,
+                            ),
                             Text(
                               'Operator',
                               style: TextStyle(
                                   fontFamily: 'Open Sans',
-                                  fontWeight: FontWeight.bold
-                              ),
+                                  fontWeight: FontWeight.bold),
                             ),
                             Image(
                               image: FileImage(
@@ -173,13 +177,14 @@ class _confirmState extends State<confirm> {
                               ),
                               width: MediaQuery.of(context).size.width / 5,
                             ),
-                            SizedBox(height: 10,),
+                            SizedBox(
+                              height: 10,
+                            ),
                             Text(
                               'Uploaded\nDocument',
                               style: TextStyle(
                                   fontFamily: 'Open Sans',
-                                  fontWeight: FontWeight.bold
-                              ),
+                                  fontWeight: FontWeight.bold),
                             )
                           ],
                         ),
@@ -239,7 +244,9 @@ class _confirmState extends State<confirm> {
                     ],
                   ),
                   Spacer(),
-                  SizedBox(height: 30,)
+                  SizedBox(
+                    height: 30,
+                  )
                 ],
               ),
             ),
