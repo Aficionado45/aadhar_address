@@ -22,34 +22,84 @@ Future<void> getFeedback(BuildContext context) {
     builder: (BuildContext context) => AlertDialog(
       title: Text(
         'Raise a Suggestion',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Open Sans'
+        ),
       ),
       content: TextField(
+        maxLines: 5,
         decoration: InputDecoration(
-          hintText: 'Enter your feedback/suggestion/query',
+          filled: true,
+          focusColor: Colors.black,
+          icon: Icon(
+            Icons.help_outline_rounded,
+            color: Color(0xFF143B40),
+          ),
+          labelText: 'Feedback/Suggestion/Query',
+          labelStyle: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Open Sans',
+            fontSize: 12,
+          ),
+          // hintText: 'Enter your feedback/suggestion/query',
+        ),
+        style: TextStyle(
+          fontFamily: 'Open Sans',
+          fontWeight: FontWeight.bold
         ),
         onChanged: (val) {
           feedback = val;
         },
       ),
       actions: [
-        TextButton(
-          child: Text(
-            'Cancel',
+        Container(
+          decoration: BoxDecoration(
+            color: Color(0xFF143B40),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          alignment: FractionalOffset.center,
+          width: MediaQuery.of(context).size.width / 5,
+          height: 40,
+          child: FlatButton(
+            child: Text(
+              'Cancel',
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Open Sans',
+                fontSize: 12
+              ),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
-        TextButton(
-          child: Text(
-            'Submit',
+        Container(
+          decoration: BoxDecoration(
+            color: Color(0xFF143B40),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
-          onPressed: () async {
-            if (feedback != '') {
-              await submitFeedback(feedback);
-            }
-            Navigator.pop(context);
-          },
+          alignment: FractionalOffset.center,
+          width: MediaQuery.of(context).size.width / 5,
+          height: 40,
+          child: FlatButton(
+            child: Text(
+              'Submit',
+              style: TextStyle(
+                fontFamily: 'Open Sans',
+                color: Colors.white,
+                fontSize: 12
+              ),
+            ),
+            onPressed: () async {
+              if (feedback != '') {
+                await submitFeedback(feedback);
+              }
+              Navigator.pop(context);
+            },
+          ),
         )
       ],
     ),
