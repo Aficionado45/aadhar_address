@@ -1,4 +1,3 @@
-
 import 'package:aadhar_address/screens/op_login.dart';
 import 'package:aadhar_address/services/authentication_methods.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +6,10 @@ import 'package:otp_text_field/otp_field_style.dart';
 import 'package:otp_text_field/style.dart';
 
 class opOTP extends StatefulWidget {
-  const opOTP({this.txnid,this.aadharno});
-  final String txnid,aadharno;
+  const opOTP({this.txnid, this.aadharno});
+
+  final String txnid, aadharno;
+
   @override
   _opOTPState createState() => _opOTPState();
 }
@@ -17,13 +18,14 @@ class _opOTPState extends State<opOTP> {
   @override
   String otp;
   bool error = false;
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        toolbarHeight: MediaQuery.of(context).size.height/8,
+        toolbarHeight: MediaQuery.of(context).size.height / 8,
         elevation: 0,
-        leadingWidth: MediaQuery.of(context).size.width/4,
+        leadingWidth: MediaQuery.of(context).size.width / 4,
         leading: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Hero(
@@ -48,9 +50,8 @@ class _opOTPState extends State<opOTP> {
                 width: MediaQuery.of(context).size.width,
                 style: TextStyle(
                     fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Open Sans'
-                ),
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Open Sans'),
                 textFieldAlignment: MainAxisAlignment.spaceAround,
                 fieldWidth: MediaQuery.of(context).size.width / 10,
                 fieldStyle: FieldStyle.underline,
@@ -59,9 +60,7 @@ class _opOTPState extends State<opOTP> {
                   print("Completed: " + pin);
                 },
                 otpFieldStyle: OtpFieldStyle(
-                  borderColor: Colors.grey,
-                  focusBorderColor: Colors.black
-                ),
+                    borderColor: Colors.grey, focusBorderColor: Colors.black),
               ),
             ),
             Container(
@@ -73,24 +72,22 @@ class _opOTPState extends State<opOTP> {
               width: MediaQuery.of(context).size.width / 3.0,
               height: 40,
               child: FlatButton(
-                onPressed: () async{
+                onPressed: () async {
                   if (otp.isNotEmpty) {
                     setState(() {
                       error = false;
                     });
-                    bool isValidated = await validateOTP(widget.aadharno, otp, widget.txnid);
+                    bool isValidated =
+                        await validateOTP(widget.aadharno, otp, widget.txnid);
                     print(isValidated);
-                    if(isValidated){
+                    if (isValidated) {
                       Navigator.pushNamed(context, 'userlogin');
-                    }
-                    else{
+                    } else {
                       setState(() {
-                        error=true;
+                        error = true;
                       });
-
                     }
-                  }
-                  else{
+                  } else {
                     setState(() {
                       error = true;
                     });
@@ -100,10 +97,9 @@ class _opOTPState extends State<opOTP> {
                   "Enter OTP",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize:  MediaQuery.of(context).size.width / 30,
+                      fontSize: MediaQuery.of(context).size.width / 30,
                       fontFamily: 'Open Sans',
-                      fontWeight: FontWeight.bold
-                  ),
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -113,17 +109,17 @@ class _opOTPState extends State<opOTP> {
               style: TextStyle(
                   color: error ? Colors.red : Colors.white,
                   fontFamily: 'Open Sans',
-                  fontWeight: FontWeight.bold
-              ),
+                  fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height / 12,)
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 12,
+            )
           ],
         ),
       ),
     );
   }
 }
-
 
 //TODO: Improve UI
 //Error for wrong otp and resend option
