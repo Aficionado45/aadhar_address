@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Aadhar Address Update",
-      initialRoute: 'biometric',
+      initialRoute: 'welcome',
       routes: {
         'welcome': (context) => WelcomeScreen(),
         'oplogin': (context) => opLogin(),

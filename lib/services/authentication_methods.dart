@@ -24,7 +24,7 @@ Future<Map<String,dynamic>> getotp(aadharno,captcha,captchatxnid) async {
   final uuidno = uuid.v4();
   final Map<String, dynamic> params = {
     //as uid give the uid
-    "uidNumber": "999985981663",
+    "uidNumber": "${aadharno}",
     "captchaTxnId": captchatxnid,
     "captchaValue": captcha,
     "transactionId": "MYAADHAAR:${uuidno}"
@@ -45,18 +45,22 @@ Future<Map<String,dynamic>> getotp(aadharno,captcha,captchatxnid) async {
 Future<bool> validateOTP(String aadharno, String otp, String txnid) async{
   final Map<String, dynamic> params = {
     'txnNumber': txnid,
-    'otp': otp,
+    'otp': int.parse(otp),
     'shareCode': '0000',
     'uid': aadharno
   };
+  print(otp);
+  print(txnid);
   var myUri = Uri.parse('https://stage1.uidai.gov.in/eAadhaarService/api/downloadOfflineEkyc');
   var response = await http.post(myUri, body: json.encode(params), headers: {
     'Content-Type': 'application/json'
   });
   Map<String, dynamic> responsebody = json.decode(response.body);
+  print(responsebody);
   if(responsebody['status'] == 'Success'){
     return true;
   }
+
   else{
     return false;
   }

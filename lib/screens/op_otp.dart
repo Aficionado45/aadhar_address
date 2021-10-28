@@ -7,8 +7,8 @@ import 'package:otp_text_field/otp_field_style.dart';
 import 'package:otp_text_field/style.dart';
 
 class opOTP extends StatefulWidget {
-  const opOTP();
-
+  const opOTP({this.txnid,this.aadharno});
+  final String txnid,aadharno;
   @override
   _opOTPState createState() => _opOTPState();
 }
@@ -74,13 +74,20 @@ class _opOTPState extends State<opOTP> {
               height: 40,
               child: FlatButton(
                 onPressed: () async{
-                  if (otp != null) {
+                  if (otp.isNotEmpty) {
                     setState(() {
                       error = false;
                     });
-                    bool isValidated = await validateOTP(op_aadhar, otp, captchatxnid);
+                    bool isValidated = await validateOTP(widget.aadharno, otp, widget.txnid);
+                    print(isValidated);
                     if(isValidated){
                       Navigator.pushNamed(context, 'userlogin');
+                    }
+                    else{
+                      setState(() {
+                        error=true;
+                      });
+
                     }
                   }
                   else{
