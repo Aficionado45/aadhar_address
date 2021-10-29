@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:aadhar_address/screens/capture.dart';
 import 'package:aadhar_address/screens/op_login.dart';
 import 'package:aadhar_address/screens/user_login.dart';
 import 'package:aadhar_address/utils/feedback_form.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:aadhar_address/screens/editable_form.dart';
 import 'package:aadhar_address/screens/scan.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
+import 'package:path_provider/path_provider.dart';
 
 class confirm extends StatefulWidget {
   const confirm();
@@ -15,14 +19,47 @@ class confirm extends StatefulWidget {
   _confirmState createState() => _confirmState();
 }
 
+File user_image;
+File operator_image;
+File document_image;
+
 class _confirmState extends State<confirm> {
-  @override
+
   String op_aadhar;
   String user_aadhar;
   String userRef;
   String opRef;
   bool error = false;
   bool error_user = false;
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    imageLoader();
+  }
+
+  void imageLoader() async{
+    user_image = await retrieveImage('$userRefId/user.png');
+    setState(() {});
+    operator_image = await retrieveImage('$userRefId/operator.png');
+    setState(() {});
+    document_image = await retrieveImage('$userRefId/document.png');
+    setState(() {});
+  }
+  @override
+
+  Future<File> retrieveImage(String path) async{
+    Directory appDocDirectory = await getApplicationDocumentsDirectory();
+    File retrievedImage = File('${appDocDirectory.path}/temp.png');
+    try{
+      await FirebaseStorage.instance.ref(path).writeToFile(retrievedImage);
+    } on FirebaseException catch(err){
+      print(err.toString());
+    }
+    return retrievedImage;
+  }
 
   Widget build(BuildContext context) {
     return new WillPopScope(
@@ -152,12 +189,17 @@ class _confirmState extends State<confirm> {
                       Container(
                         child: Column(
                           children: [
-                            Image(
+                            user_image != null ? Image(
                               image: FileImage(
-                                userImage,
+                                user_image,
                               ),
                               width: MediaQuery.of(context).size.width / 5,
                               height: MediaQuery.of(context).size.height / 5,
+                            ) :
+                            Icon(
+                              Icons.downloading_rounded,
+                              color: Color(0xFF143B40),
+                              size: MediaQuery.of(context).size.width / 5,
                             ),
                             Text(
                               'User',
@@ -168,12 +210,17 @@ class _confirmState extends State<confirm> {
                             SizedBox(
                               height: 5,
                             ),
-                            Image(
+                            operator_image != null ? Image(
                               image: FileImage(
-                                operatorImage,
+                                operator_image,
                               ),
                               width: MediaQuery.of(context).size.width / 5,
                               height: MediaQuery.of(context).size.height / 5,
+                            ) :
+                            Icon(
+                              Icons.downloading_rounded,
+                              color: Color(0xFF143B40),
+                              size: MediaQuery.of(context).size.width / 5,
                             ),
                             SizedBox(
                               height: 10,
@@ -187,12 +234,17 @@ class _confirmState extends State<confirm> {
                             SizedBox(
                               height: 5,
                             ),
-                            Image(
+                            document_image != null ? Image(
                               image: FileImage(
-                                operatorImage,
+                                document_image,
                               ),
                               width: MediaQuery.of(context).size.width / 5,
                               height: MediaQuery.of(context).size.height / 5,
+                            ) :
+                            Icon(
+                              Icons.downloading_rounded,
+                              color: Color(0xFF143B40),
+                              size: MediaQuery.of(context).size.width / 5,
                             ),
                             SizedBox(
                               height: 10,
@@ -377,7 +429,7 @@ class _confirmState extends State<confirm> {
                                 error_user = false;
                               });
                               Navigator.pushNamed(context, 'recipt',
-                                  arguments: {user_aadhar, op_aadhar});
+                                  arguments: {'user_aadhar': user_aadhar, 'op_aadhar': op_aadhar});
                             }
                           },
                           child: Text(

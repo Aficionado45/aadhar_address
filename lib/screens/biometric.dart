@@ -15,13 +15,13 @@ class _biometricState extends State<biometric> {
   bool operatorUploaded = false;
 
   Future getFingerprint() async {
-    LocalAuthentication localAuth = new LocalAuthentication();
-    bool canCheckBiometrics = await localAuth.canCheckBiometrics;
-    if (canCheckBiometrics) {
-      // List<BiometricType> availableBiometrics = await localAuth.getAvailableBiometrics();
-      bool isAuthenticated = await localAuth.authenticate(
-          localizedReason: 'Provide fingerprint', biometricOnly: true);
-    }
+    // LocalAuthentication localAuth = new LocalAuthentication();
+    // bool canCheckBiometrics = await localAuth.canCheckBiometrics;
+    // if (canCheckBiometrics) {
+    //   // List<BiometricType> availableBiometrics = await localAuth.getAvailableBiometrics();
+    //   bool isAuthenticated = await localAuth.authenticate(
+    //       localizedReason: 'Provide fingerprint', biometricOnly: true);
+    // }
   }
 
   @override
