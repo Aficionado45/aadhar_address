@@ -71,8 +71,7 @@ class _userOTPState extends State<userOTP> {
                 fieldWidth: MediaQuery.of(context).size.width / 10,
                 fieldStyle: FieldStyle.underline,
                 onCompleted: (pin) {
-                  if(pin.isNotEmpty)
-                  otp = pin;
+                  if (pin.isNotEmpty) otp = pin;
                   print("Completed: " + pin);
                 },
                 otpFieldStyle: OtpFieldStyle(
@@ -97,7 +96,7 @@ class _userOTPState extends State<userOTP> {
                     bool isValidated =
                         await validateOTP(widget.aadharno, otp, widget.txnid);
                     if (isValidated) {
-                      switch (3) {
+                      switch (widget.step) {
                         case 0:
                           Navigator.pushNamed(context, 'scan');
                           break;
