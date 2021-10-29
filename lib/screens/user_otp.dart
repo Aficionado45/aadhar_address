@@ -1,4 +1,5 @@
 import 'package:aadhar_address/screens/editable_form.dart';
+import 'package:aadhar_address/screens/user_login.dart';
 import 'package:aadhar_address/services/authentication_methods.dart';
 import 'package:aadhar_address/utils/feedback_form.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +23,19 @@ class _userOTPState extends State<userOTP> {
   @override
   String otp;
   bool error = false;
+  int pin;
+  String address;
+  String modAdd;
 
-  void getData() {}
+  Future<void> getData() async {
+    DocumentSnapshot ds = await FirebaseFirestore.instance
+        .collection('ongoing')
+        .doc(userRefId)
+        .get();
+    pin = ds.get('pincode');
+    address = ds.get('scanned_address');
+    modAdd = ds.get('updated_address');
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,7 +119,12 @@ class _userOTPState extends State<userOTP> {
                           Navigator.pushNamed(context, 'scan');
                           break;
                         case 2:
-                          Navigator.pushNamed(context, 'form');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => editForm(address: address),
+                            ),
+                          );
                           break;
                         case 3:
                           Navigator.pushNamed(context, 'capture');
