@@ -53,7 +53,6 @@ File userImage;
 File operatorImage;
 
 class _captureState extends State<capture> {
-
   bool userUploaded = false;
   bool operatorUploaded = false;
   bool error = false;
@@ -65,9 +64,9 @@ class _captureState extends State<capture> {
       child: new Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          toolbarHeight: MediaQuery.of(context).size.height/8,
+          toolbarHeight: MediaQuery.of(context).size.height / 8,
           elevation: 0,
-          leadingWidth: MediaQuery.of(context).size.width/4,
+          leadingWidth: MediaQuery.of(context).size.width / 4,
           leading: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Hero(
@@ -84,7 +83,7 @@ class _captureState extends State<capture> {
                 color: Color(0xFF143B40),
                 size: 30,
               ),
-              onPressed: (){
+              onPressed: () {
                 getFeedback(context);
               },
             )
@@ -102,8 +101,7 @@ class _captureState extends State<capture> {
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
-                    fontFamily: 'Open Sans'
-                ),
+                    fontFamily: 'Open Sans'),
               ),
               SizedBox(
                 height: 10,
@@ -125,20 +123,18 @@ class _captureState extends State<capture> {
                             )
                           : Icon(
                               Icons.person_outline_rounded,
-                              size: MediaQuery.of(context).size.height / 4,
+                              size: MediaQuery.of(context).size.height / 6,
                             ),
                       Text(
                         'User',
                         style: TextStyle(
-                          fontFamily: 'Open Sans',
-                          fontWeight: FontWeight.bold
-                        ),
+                            fontFamily: 'Open Sans',
+                            fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 5.0,
                       ),
                       Container(
-
                         child: IconButton(
                           onPressed: () async {
                             final PickedFile newImage =
@@ -154,7 +150,7 @@ class _captureState extends State<capture> {
                             Icons.camera_alt_rounded,
                             color: Color(0xFF143B40),
                           ),
-                          iconSize: MediaQuery.of(context).size.height/16,
+                          iconSize: MediaQuery.of(context).size.height / 16,
                         ),
                       ),
                     ],
@@ -173,24 +169,22 @@ class _captureState extends State<capture> {
                             )
                           : Icon(
                               Icons.person_outline_rounded,
-                              size: MediaQuery.of(context).size.height / 4,
+                              size: MediaQuery.of(context).size.height / 6,
                             ),
                       Text(
                         'Operator',
                         style: TextStyle(
                             fontFamily: 'Open Sans',
-                            fontWeight: FontWeight.bold
-                        ),
+                            fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 5.0,
                       ),
                       Container(
-
                         child: IconButton(
                           onPressed: () async {
                             final PickedFile newImage =
-                            await pickImageFromCamera(context);
+                                await pickImageFromCamera(context);
                             setState(() {
                               if (newImage != null) {
                                 operatorImage = File(newImage.path);
@@ -202,7 +196,7 @@ class _captureState extends State<capture> {
                             Icons.camera_alt_rounded,
                             color: Color(0xFF143B40),
                           ),
-                          iconSize: MediaQuery.of(context).size.height/16,
+                          iconSize: MediaQuery.of(context).size.height / 16,
                         ),
                       ),
                     ],
@@ -228,7 +222,7 @@ class _captureState extends State<capture> {
                         setState(() {
                           error = false;
                         });
-                        Navigator.pushReplacementNamed(context, 'capture');
+                        Navigator.pushReplacementNamed(context, 'confirmation');
                       },
                       child: Text(
                         "Reset",
@@ -253,7 +247,6 @@ class _captureState extends State<capture> {
                     child: FlatButton(
                       onPressed: () async {
                         if (userUploaded && operatorUploaded) {
-
                           setState(() {
                             error = false;
                           });
@@ -263,8 +256,7 @@ class _captureState extends State<capture> {
                           await uploadImage(
                               operatorImage, '$userRefId/operator.png');
                           Navigator.pushNamed(context, "confirm");
-                        }
-                        else{
+                        } else {
                           setState(() {
                             error = true;
                           });
@@ -287,10 +279,11 @@ class _captureState extends State<capture> {
                 style: TextStyle(
                     color: error ? Colors.red : Colors.white,
                     fontFamily: 'Open Sans',
-                    fontWeight: FontWeight.bold
-                ),
+                    fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height / 12,)
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 12,
+              )
             ],
           ),
         ),

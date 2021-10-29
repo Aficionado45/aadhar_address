@@ -1,8 +1,8 @@
-
 import 'package:aadhar_address/screens/editable_form.dart';
 import 'package:aadhar_address/services/locationmethods.dart';
 import 'package:aadhar_address/utils/feedback_form.dart';
 import 'package:flutter/material.dart';
+import 'package:aadhar_address/utils/constans.dart';
 
 enum AppState { free, comparedlocation, unsuccessful }
 
@@ -18,15 +18,20 @@ class cnfrmAddress extends StatefulWidget {
 class _cnfrmAddressState extends State<cnfrmAddress> {
   AppState state = AppState.free;
   double _distanceinmeters;
+  TextEditingController script = TextEditingController();
+  void initState() {
+    super.initState();
+    script.text = widget.address;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        toolbarHeight: MediaQuery.of(context).size.height/8,
+        toolbarHeight: MediaQuery.of(context).size.height / 8,
         elevation: 0,
-        leadingWidth: MediaQuery.of(context).size.width/4,
+        leadingWidth: MediaQuery.of(context).size.width / 4,
         leading: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Hero(
@@ -43,127 +48,157 @@ class _cnfrmAddressState extends State<cnfrmAddress> {
               color: Color(0xFF143B40),
               size: 30,
             ),
-            onPressed: (){
+            onPressed: () {
               getFeedback(context);
             },
           )
         ],
       ),
       backgroundColor: Colors.white,
-      body: Center(
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                widget.address,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.all(20),
+            child: Container(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFF143B40),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    alignment: FractionalOffset.center,
-                    width: MediaQuery.of(context).size.width / 2.5,
-                    height: 40,
-                    child: FlatButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pushReplacementNamed(context, 'scan');
-                      },
-                      child: Text(
-                        "Scan Again",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                        ),
+                  Text("Document Extracted Address", style: kHeaderStyle),
+                  Text(
+                    "Confirm With Current GPS Location",
+                    style: kHeaderStyle,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 15,
+                  ),
+                  TextFormField(
+                    readOnly: true,
+                    controller: script,
+                    minLines: 5,
+                    maxLines: 100,
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                    onChanged: (val) {
+                      setState(() {});
+                    },
+                    decoration: new InputDecoration(
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
                       ),
+                      //fillColor: Colors.green
                     ),
                   ),
                   SizedBox(
-                    width: 10,
+                    height: 20,
                   ),
-                  if (state == AppState.free)
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xFF143B40),
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      alignment: FractionalOffset.center,
-                      width: MediaQuery.of(context).size.width / 2.5,
-                      height: 40,
-                      child: FlatButton(
-                        onPressed: () async {
-                          _distanceinmeters = await getlocation(widget.address);
-                          print(_distanceinmeters);
-                          setState(() {
-                            state = _distanceinmeters > 300
-                                ? AppState.unsuccessful
-                                : AppState.comparedlocation;
-                          });
-                        },
-                        child: Text(
-                          "Get Location",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xFF143B40),
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        alignment: FractionalOffset.center,
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        height: 40,
+                        child: FlatButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pushReplacementNamed(context, 'scan');
+                          },
+                          child: Text(
+                            "Scan Again",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                            ),
                           ),
                         ),
                       ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      if (state == AppState.free)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xFF143B40),
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          alignment: FractionalOffset.center,
+                          width: MediaQuery.of(context).size.width / 2.5,
+                          height: 40,
+                          child: FlatButton(
+                            onPressed: () async {
+                              _distanceinmeters =
+                                  await getlocation(widget.address);
+                              print(_distanceinmeters);
+                              setState(() {
+                                state = _distanceinmeters > 300
+                                    ? AppState.unsuccessful
+                                    : AppState.comparedlocation;
+                              });
+                            },
+                            child: Text(
+                              "Get Location",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                      if (state == AppState.comparedlocation)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xFF143B40),
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          alignment: FractionalOffset.center,
+                          width: MediaQuery.of(context).size.width / 2.5,
+                          height: 40,
+                          child: FlatButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      editForm(address: widget.address),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              "Confirm Address",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  if (_distanceinmeters != null)
+                    Text(
+                      "Discrepancy: $_distanceinmeters meters",
+                      textAlign: TextAlign.center,
+                    ),
+                  if (state == AppState.unsuccessful)
+                    Text(
+                      "The Distance between the address extracted from OCR and the address otained from GPS is more than 300 metres. Reset and scan again",
+                      textAlign: TextAlign.center,
                     ),
                   if (state == AppState.comparedlocation)
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xFF143B40),
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      alignment: FractionalOffset.center,
-                      width: MediaQuery.of(context).size.width / 2.5,
-                      height: 40,
-                      child: FlatButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  editForm(address: widget.address),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          "Confirm Address",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    )
+                    Text(
+                      "Location verified using GPS. Now you can confirm the address and proceed",
+                      textAlign: TextAlign.center,
+                    ),
                 ],
               ),
-              if (_distanceinmeters != null)
-                Text(
-                  "Discrepancy: $_distanceinmeters meters",
-                  textAlign: TextAlign.center,
-                ),
-              if (state == AppState.unsuccessful)
-                Text(
-                  "The Distance between the address extracted from OCR and the address otained from GPS is more than 300 metres. Reset and scan again",
-                  textAlign: TextAlign.center,
-                ),
-              if (state == AppState.comparedlocation)
-                Text(
-                  "Location verified using GPS. Now you can confirm the address and proceed",
-                  textAlign: TextAlign.center,
-                ),
-            ],
+            ),
           ),
         ),
       ),

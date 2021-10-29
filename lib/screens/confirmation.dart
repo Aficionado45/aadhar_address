@@ -3,6 +3,10 @@ import 'package:aadhar_address/screens/op_login.dart';
 import 'package:aadhar_address/screens/user_login.dart';
 import 'package:aadhar_address/utils/feedback_form.dart';
 import 'package:flutter/material.dart';
+import 'package:aadhar_address/screens/editable_form.dart';
+import 'package:aadhar_address/screens/scan.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 class confirm extends StatefulWidget {
   const confirm();
@@ -13,6 +17,13 @@ class confirm extends StatefulWidget {
 
 class _confirmState extends State<confirm> {
   @override
+  String op_aadhar;
+  String user_aadhar;
+  String userRef;
+  String opRef;
+  bool error = false;
+  bool error_user = false;
+
   Widget build(BuildContext context) {
     return new WillPopScope(
       onWillPop: () async => false,
@@ -49,9 +60,7 @@ class _confirmState extends State<confirm> {
           child: Container(
             child: Padding(
               padding: const EdgeInsets.all(15.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: ListView(
                 children: [
                   Spacer(),
                   Row(
@@ -81,21 +90,8 @@ class _confirmState extends State<confirm> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              /* child: Text(
-                                'User Aadhaar No: $user_aadhar',
-                                style: TextStyle(
-                                  fontFamily: 'Open Sans',
-                                  fontWeight: FontWeight.bold
-                                ),
-                              ),*/
-                              width: MediaQuery.of(context).size.width * 0.6,
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Container(
                               child: Text(
-                                'Operator Aadhaar No: XXXXXXXX${op_aadhar.substring(8)}',
+                                'Transaction ID: $userRefId',
                                 style: TextStyle(
                                     fontFamily: 'Open Sans',
                                     fontWeight: FontWeight.bold),
@@ -103,7 +99,7 @@ class _confirmState extends State<confirm> {
                               width: MediaQuery.of(context).size.width * 0.6,
                             ),
                             SizedBox(
-                              height: 20,
+                              height: 5,
                             ),
                             Container(
                               child: Text(
@@ -115,11 +111,11 @@ class _confirmState extends State<confirm> {
                               width: MediaQuery.of(context).size.width * 0.6,
                             ),
                             SizedBox(
-                              height: 20,
+                              height: 5,
                             ),
                             Container(
                               child: Text(
-                                'Captured Address: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+                                'Time: ${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}',
                                 style: TextStyle(
                                     fontFamily: 'Open Sans',
                                     fontWeight: FontWeight.bold),
@@ -131,7 +127,19 @@ class _confirmState extends State<confirm> {
                             ),
                             Container(
                               child: Text(
-                                'Modified Address: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+                                'Captured Address: $address',
+                                style: TextStyle(
+                                    fontFamily: 'Open Sans',
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              width: MediaQuery.of(context).size.width * 0.6,
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              child: Text(
+                                'Modified Address: $modifiedAdd',
                                 style: TextStyle(
                                     fontFamily: 'Open Sans',
                                     fontWeight: FontWeight.bold),
@@ -149,6 +157,7 @@ class _confirmState extends State<confirm> {
                                 userImage,
                               ),
                               width: MediaQuery.of(context).size.width / 5,
+                              height: MediaQuery.of(context).size.height / 5,
                             ),
                             Text(
                               'User',
@@ -156,11 +165,15 @@ class _confirmState extends State<confirm> {
                                   fontFamily: 'Open Sans',
                                   fontWeight: FontWeight.bold),
                             ),
+                            SizedBox(
+                              height: 5,
+                            ),
                             Image(
                               image: FileImage(
                                 operatorImage,
                               ),
                               width: MediaQuery.of(context).size.width / 5,
+                              height: MediaQuery.of(context).size.height / 5,
                             ),
                             SizedBox(
                               height: 10,
@@ -171,11 +184,15 @@ class _confirmState extends State<confirm> {
                                   fontFamily: 'Open Sans',
                                   fontWeight: FontWeight.bold),
                             ),
+                            SizedBox(
+                              height: 5,
+                            ),
                             Image(
                               image: FileImage(
                                 operatorImage,
                               ),
                               width: MediaQuery.of(context).size.width / 5,
+                              height: MediaQuery.of(context).size.height / 5,
                             ),
                             SizedBox(
                               height: 10,
@@ -190,6 +207,100 @@ class _confirmState extends State<confirm> {
                         ),
                       )
                     ],
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    width: MediaQuery.of(context).size.width / 1.3,
+                    height: MediaQuery.of(context).size.height / 13.6,
+                    child: TextField(
+                      // maxLength: 12,
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Open Sans',
+                        fontSize: 20,
+                      ),
+                      onChanged: (value) {
+                        if (value.isEmpty)
+                          return null;
+                        else {
+                          op_aadhar = value;
+                        }
+                      },
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 20.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              // color: Colors.redAccent,
+                              width: 1.0),
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              // color: Colors.redAccent,
+                              width: 2.0),
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        ),
+                        filled: true,
+                        labelStyle:
+                            TextStyle(color: Colors.black, fontSize: 20),
+                        labelText: "Confirm Operator Aadhaar Number",
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    width: MediaQuery.of(context).size.width / 1.3,
+                    height: MediaQuery.of(context).size.height / 13.6,
+                    child: TextField(
+                      // maxLength: 12,
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Open Sans',
+                        fontSize: 20,
+                      ),
+                      onChanged: (value) {
+                        if (value.isEmpty)
+                          return null;
+                        else {
+                          user_aadhar = value;
+                        }
+                      },
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 20.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              // color: Colors.redAccent,
+                              width: 1.0),
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              // color: Colors.redAccent,
+                              width: 2.0),
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        ),
+                        filled: true,
+                        labelStyle:
+                            TextStyle(color: Colors.black, fontSize: 20),
+                        labelText: "Confirm User Aadhaar Number",
+                      ),
+                    ),
                   ),
                   Spacer(),
                   Row(
@@ -230,7 +341,44 @@ class _confirmState extends State<confirm> {
                         height: 40,
                         child: FlatButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, 'biometric');
+                            if (op_aadhar != null && op_aadhar.length == 12) {
+                              var bytes = utf8.encode(op_aadhar);
+                              var digest = sha1.convert(bytes);
+                              opRef = digest.toString();
+                              opRef = opRefId.substring(0, 10);
+                              print("Operator Ref ID: $opRef");
+                              print("Operator Ref ID: $opRefId");
+                            }
+                            if (op_aadhar != null && op_aadhar.length == 12) {
+                              var bytes = utf8.encode(op_aadhar);
+                              var digest = sha1.convert(bytes);
+                              userRef = digest.toString();
+                              userRef = userRefId.substring(0, 10);
+                              print("User Ref ID: $userRef");
+                              print("User Ref ID: $userRefId");
+                            }
+
+                            if (userRef != userRefId) {
+                              setState(() {
+                                error_user = true;
+                                print("error User");
+                              });
+                            }
+                            if (opRef != opRefId) {
+                              setState(() {
+                                error = true;
+                                print("error");
+                              });
+                            }
+                            if (userRef == userRefId && opRef == opRefId) {
+                              print("Verified");
+                              setState(() {
+                                error = false;
+                                error_user = false;
+                              });
+                              Navigator.pushNamed(context, 'recipt',
+                                  arguments: {user_aadhar, op_aadhar});
+                            }
                           },
                           child: Text(
                             "Confirm",
@@ -244,6 +392,20 @@ class _confirmState extends State<confirm> {
                     ],
                   ),
                   Spacer(),
+                  Text(
+                    'Wrong Operator Aadhar Number',
+                    style: TextStyle(
+                        color: error ? Colors.red : Colors.white,
+                        fontFamily: 'Open Sans',
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'Wrong User Aadhar Number',
+                    style: TextStyle(
+                        color: error_user ? Colors.red : Colors.white,
+                        fontFamily: 'Open Sans',
+                        fontWeight: FontWeight.bold),
+                  ),
                   SizedBox(
                     height: 30,
                   )
@@ -256,7 +418,3 @@ class _confirmState extends State<confirm> {
     );
   }
 }
-
-
-//TODO: Improve UI
-//On reset line 39 and on confirm update the ongoing doc step and timestamp.

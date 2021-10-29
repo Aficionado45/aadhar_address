@@ -36,15 +36,11 @@ class _scanDocState extends State<scanDoc> {
     var db = FirebaseFirestore.instance;
     address = script.text;
     DateTime curr = DateTime.now();
-    db.collection("ongoing").doc(userRefId).update({
-      "step": 2,
-      "timestamp": curr,
-    });
     db.collection("ongoing").doc(userRefId).set({
       "scanned_address": address,
       "step": 2,
       "timestamp": curr,
-    });
+    }, SetOptions(merge: true));
   }
 
   @override
@@ -81,6 +77,7 @@ class _scanDocState extends State<scanDoc> {
         ),
         backgroundColor: Colors.white,
         body: ListView(
+          padding: EdgeInsets.all(20),
           children: [
             Spacer(),
             Center(
@@ -89,15 +86,19 @@ class _scanDocState extends State<scanDoc> {
                 style: TextStyle(fontSize: 25),
               ),
             ),
-            SizedBox(height: 20),
+            if (state != AppState.free)
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 30,
+              ),
             _image == null
                 ? Text(
                     'No image selected.',
                     style: TextStyle(fontSize: 20, color: Colors.white),
                   )
                 : Container(
-                    height: 300, width: 300, child: Image.file(_image)),
-            SizedBox(height: 20),
+                    height: MediaQuery.of(context).size.height / 3,
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: Image.file(_image)),
             if (state == AppState.extracted)
               Padding(
                 padding: const EdgeInsets.all(32.0),
@@ -124,7 +125,7 @@ class _scanDocState extends State<scanDoc> {
                   padding: const EdgeInsets.all(32.0),
                   child: Container(
                     padding: const EdgeInsets.all(10.0),
-                    height: MediaQuery.of(context).size.height / 2,
+                    height: MediaQuery.of(context).size.height / 3,
                     width: MediaQuery.of(context).size.width,
                     child: Card(
                         color: Colors.grey,
@@ -138,9 +139,6 @@ class _scanDocState extends State<scanDoc> {
                               Icon(Icons.camera),
                             ])),
                   )),
-            SizedBox(height: 20),
-            SizedBox(height: 10),
-            SizedBox(height: 10),
             if (state == AppState.free)
               Container(
                 decoration: BoxDecoration(
@@ -163,28 +161,61 @@ class _scanDocState extends State<scanDoc> {
                   ),
                 ),
               ),
+            SizedBox(
+              height: 10,
+            ),
             if (state == AppState.picked || state == AppState.extracted)
-              Container(
-                decoration: BoxDecoration(
-                  color: Color(0xFF143B40),
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                alignment: FractionalOffset.center,
-                width: MediaQuery.of(context).size.width / 3,
-                height: 40,
-                child: FlatButton(
-                  onPressed: () {
-                    cropImage();
-                  },
-                  child: Text(
-                    "Crop Document",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                    ),
+              SizedBox(
+                height: 20,
+              ),
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xFF143B40),
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              alignment: FractionalOffset.center,
+              width: MediaQuery.of(context).size.width / 5,
+              height: 40,
+              child: FlatButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, 'scan');
+                },
+                child: Text(
+                  "Capture Again",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
                   ),
                 ),
               ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xFF143B40),
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              alignment: FractionalOffset.center,
+              width: MediaQuery.of(context).size.width / 5,
+              height: 40,
+              child: FlatButton(
+                onPressed: () {
+                  cropImage();
+                },
+                child: Text(
+                  "Crop Document",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
             if (state == AppState.picked || state == AppState.extracted)
               Container(
                 decoration: BoxDecoration(
@@ -195,11 +226,16 @@ class _scanDocState extends State<scanDoc> {
                 width: MediaQuery.of(context).size.width / 3,
                 height: 40,
                 child: FlatButton(
-                  onPressed: () {
+                  onPressed: () async {
                     setState(() {
                       state = AppState.cropped;
                     });
-                    getText();
+                    await getText();
+
+                    if (script.text.length == 0)
+                      setState(() {
+                        error = true;
+                      });
                   },
                   child: Text(
                     "Extract address",
@@ -210,6 +246,9 @@ class _scanDocState extends State<scanDoc> {
                   ),
                 ),
               ),
+            SizedBox(
+              height: 10,
+            ),
             if (state == AppState.extracted)
               Container(
                 decoration: BoxDecoration(
@@ -218,12 +257,11 @@ class _scanDocState extends State<scanDoc> {
                 ),
                 alignment: FractionalOffset.center,
                 width: MediaQuery.of(context).size.width / 3,
-                height: 80,
+                height: 40,
                 child: FlatButton(
                   onPressed: () async {
                     //Line is commented out for testing
-                    await uploadImage(
-                        _initialImage, '$userRefId/document.png');
+                    await uploadImage(_initialImage, '$userRefId/document.png');
                     updateData();
                     Navigator.push(
                       context,
@@ -245,12 +283,17 @@ class _scanDocState extends State<scanDoc> {
                 ),
               ),
             Spacer(),
-            Text(
-              'Invalid OTP',
-              style: TextStyle(
-                  color: error ? Colors.red : Colors.white,
-                  fontFamily: 'Open Sans',
-                  fontWeight: FontWeight.bold),
+            Center(
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  'No Address Found, Scan Again!',
+                  style: TextStyle(
+                      color: error ? Colors.red : Colors.white,
+                      fontFamily: 'Open Sans',
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height / 12,
@@ -346,7 +389,3 @@ class _scanDocState extends State<scanDoc> {
     setState(() {});
   }
 }
-
-//TODO: Impprove UI
-//OCR Integration
-//Line 40

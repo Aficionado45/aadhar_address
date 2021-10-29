@@ -1,4 +1,5 @@
 import 'package:aadhar_address/services/locationmethods.dart';
+import 'package:aadhar_address/utils/constans.dart';
 import 'package:aadhar_address/utils/feedback_form.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
@@ -40,14 +41,12 @@ class _editFormState extends State<editForm> {
   void updateData() {
     var db = FirebaseFirestore.instance;
     DateTime curr = DateTime.now();
-    db.collection("ongoing").doc(userRefId).update({
+    db.collection("ongoing").doc(userRefId).set({
       "step": 3,
       "timestamp": curr,
-    });
-    db.collection("ongoing").doc(userRefId).set({
       "updated_address": modifiedAdd,
       "pincode": pin,
-    });
+    }, SetOptions(merge: true));
   }
 
   @override
@@ -55,24 +54,48 @@ class _editFormState extends State<editForm> {
     return new WillPopScope(
       onWillPop: () async => false,
       child: new Scaffold(
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Color(0xFF143B40),
-          child: Icon(
-            Icons.help_outline_rounded,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          toolbarHeight: MediaQuery.of(context).size.height / 8,
+          elevation: 0,
+          leadingWidth: MediaQuery.of(context).size.width / 4,
+          leading: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Hero(
+              tag: 'logo',
+              child: Image(
+                image: AssetImage('images/Aadhaar_Logo.svg'),
+              ),
+            ),
           ),
-          onPressed: () async {
-            getFeedback(context);
-          },
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.help_outline_rounded,
+                color: Color(0xFF143B40),
+                size: 30,
+              ),
+              onPressed: () {
+                getFeedback(context);
+              },
+            )
+          ],
         ),
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
-          child: Container(
+          child: Padding(
+            padding: EdgeInsets.all(20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("Editable Form for adding Small Changes"),
-                Text("Confirm changed address with live location and"),
-                Text("Origianlly retrived address form document"),
+                Text(
+                  "Edit Address And Enter Pincode",
+                  style: kHeaderStyle,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 15,
+                ),
                 TextFormField(
                   controller: addressfield,
                   readOnly: !editable,
@@ -153,6 +176,9 @@ class _editFormState extends State<editForm> {
                         ),
                       ),
                     ),
+                    SizedBox(
+                      width: 10,
+                    ),
                     if (state == AppState.comparedlocation)
                       Container(
                         decoration: BoxDecoration(
@@ -177,6 +203,9 @@ class _editFormState extends State<editForm> {
                         ),
                       ),
                   ],
+                ),
+                SizedBox(
+                  height: 10,
                 ),
                 if (state == AppState.comparedlocation)
                   Container(
@@ -203,6 +232,9 @@ class _editFormState extends State<editForm> {
                       ),
                     ),
                   ),
+                SizedBox(
+                  height: 10,
+                ),
                 if (_distanceinmeters != null)
                   Text(
                     "Discrepancy: $_distanceinmeters meters",

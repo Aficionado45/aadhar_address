@@ -14,14 +14,13 @@ class opLogin extends StatefulWidget {
   _opLoginState createState() => _opLoginState();
 }
 
-String op_aadhar;
 String opRefId;
 var captchatxnid;
 
 class _opLoginState extends State<opLogin> {
   @override
   Image captchaimage;
-
+  String op_aadhar;
   var uuid = Uuid();
   String otpmessage;
   TextEditingController captchafield = new TextEditingController();
@@ -252,7 +251,6 @@ class _opLoginState extends State<opLogin> {
                     ),
                   ],
                 ),
-
               Text(
                 'Please enter a valid 12 digit Aadhaar Number',
                 style: TextStyle(

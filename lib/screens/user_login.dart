@@ -52,7 +52,7 @@ class _userLoginState extends State<userLogin> {
     DateTime curr = DateTime.now();
     db.collection("ongoing").doc(id).set({
       "step": 1,
-      "tramsactionID": id,
+      "transactionID": id,
       "timestamp": curr,
     });
   }
