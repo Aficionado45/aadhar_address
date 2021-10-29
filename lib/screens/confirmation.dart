@@ -11,6 +11,8 @@ import 'package:aadhar_address/screens/scan.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class confirm extends StatefulWidget {
   const confirm();
@@ -24,7 +26,6 @@ File operator_image;
 File document_image;
 
 class _confirmState extends State<confirm> {
-
   String op_aadhar;
   String user_aadhar;
   String userRef;
@@ -32,30 +33,49 @@ class _confirmState extends State<confirm> {
   bool error = false;
   bool error_user = false;
 
-
-
   @override
   void initState() {
     super.initState();
     imageLoader();
   }
 
-  void imageLoader() async{
-    user_image = await retrieveImage('$userRefId/user.png');
+  void update() {
+    var db = FirebaseFirestore.instance;
+    DateTime curr = DateTime.now();
+
+    db.collection("completed").doc(user_aadhar).set(
+      {
+        "Scanned_Address": address,
+        "Updated Address": modifiedAdd,
+        "Pincode": pin,
+        "User_Aadhaar": user_aadhar,
+        "Transation_ID": userRef,
+        "Operator_Aadhaar": op_aadhar,
+        "Status": "Completed",
+        "Timestamp": curr,
+      },
+    );
+    db.collection("ongoing").doc(userRef).delete();
+  }
+
+  void imageLoader() async {
+    user_image = await retrieveImage('$userRefId/user.png', 'user.png');
     setState(() {});
-    operator_image = await retrieveImage('$userRefId/operator.png');
+    operator_image =
+        await retrieveImage('$userRefId/operator.png', 'operator.png');
     setState(() {});
-    document_image = await retrieveImage('$userRefId/document.png');
+    document_image =
+        await retrieveImage('$userRefId/document.png', 'document.png');
     setState(() {});
   }
-  @override
 
-  Future<File> retrieveImage(String path) async{
+  @override
+  Future<File> retrieveImage(String path, String fileName) async {
     Directory appDocDirectory = await getApplicationDocumentsDirectory();
-    File retrievedImage = File('${appDocDirectory.path}/temp.png');
-    try{
+    File retrievedImage = File('${appDocDirectory.path}/$fileName');
+    try {
       await FirebaseStorage.instance.ref(path).writeToFile(retrievedImage);
-    } on FirebaseException catch(err){
+    } on FirebaseException catch (err) {
       print(err.toString());
     }
     return retrievedImage;
@@ -189,18 +209,21 @@ class _confirmState extends State<confirm> {
                       Container(
                         child: Column(
                           children: [
-                            user_image != null ? Image(
-                              image: FileImage(
-                                user_image,
-                              ),
-                              width: MediaQuery.of(context).size.width / 5,
-                              height: MediaQuery.of(context).size.height / 5,
-                            ) :
-                            Icon(
-                              Icons.downloading_rounded,
-                              color: Color(0xFF143B40),
-                              size: MediaQuery.of(context).size.width / 5,
-                            ),
+                            user_image != null
+                                ? Image(
+                                    image: FileImage(
+                                      user_image,
+                                    ),
+                                    width:
+                                        MediaQuery.of(context).size.width / 5,
+                                    height:
+                                        MediaQuery.of(context).size.height / 5,
+                                  )
+                                : Icon(
+                                    Icons.downloading_rounded,
+                                    color: Color(0xFF143B40),
+                                    size: MediaQuery.of(context).size.width / 5,
+                                  ),
                             Text(
                               'User',
                               style: TextStyle(
@@ -210,18 +233,21 @@ class _confirmState extends State<confirm> {
                             SizedBox(
                               height: 5,
                             ),
-                            operator_image != null ? Image(
-                              image: FileImage(
-                                operator_image,
-                              ),
-                              width: MediaQuery.of(context).size.width / 5,
-                              height: MediaQuery.of(context).size.height / 5,
-                            ) :
-                            Icon(
-                              Icons.downloading_rounded,
-                              color: Color(0xFF143B40),
-                              size: MediaQuery.of(context).size.width / 5,
-                            ),
+                            operator_image != null
+                                ? Image(
+                                    image: FileImage(
+                                      operator_image,
+                                    ),
+                                    width:
+                                        MediaQuery.of(context).size.width / 5,
+                                    height:
+                                        MediaQuery.of(context).size.height / 5,
+                                  )
+                                : Icon(
+                                    Icons.downloading_rounded,
+                                    color: Color(0xFF143B40),
+                                    size: MediaQuery.of(context).size.width / 5,
+                                  ),
                             SizedBox(
                               height: 10,
                             ),
@@ -234,18 +260,21 @@ class _confirmState extends State<confirm> {
                             SizedBox(
                               height: 5,
                             ),
-                            document_image != null ? Image(
-                              image: FileImage(
-                                document_image,
-                              ),
-                              width: MediaQuery.of(context).size.width / 5,
-                              height: MediaQuery.of(context).size.height / 5,
-                            ) :
-                            Icon(
-                              Icons.downloading_rounded,
-                              color: Color(0xFF143B40),
-                              size: MediaQuery.of(context).size.width / 5,
-                            ),
+                            document_image != null
+                                ? Image(
+                                    image: FileImage(
+                                      document_image,
+                                    ),
+                                    width:
+                                        MediaQuery.of(context).size.width / 5,
+                                    height:
+                                        MediaQuery.of(context).size.height / 5,
+                                  )
+                                : Icon(
+                                    Icons.downloading_rounded,
+                                    color: Color(0xFF143B40),
+                                    size: MediaQuery.of(context).size.width / 5,
+                                  ),
                             SizedBox(
                               height: 10,
                             ),
@@ -424,12 +453,16 @@ class _confirmState extends State<confirm> {
                             }
                             if (userRef == userRefId && opRef == opRefId) {
                               print("Verified");
+                              update();
                               setState(() {
                                 error = false;
                                 error_user = false;
                               });
                               Navigator.pushNamed(context, 'recipt',
-                                  arguments: {'user_aadhar': user_aadhar, 'op_aadhar': op_aadhar});
+                                  arguments: {
+                                    'user_aadhar': user_aadhar,
+                                    'op_aadhar': op_aadhar
+                                  });
                             }
                           },
                           child: Text(

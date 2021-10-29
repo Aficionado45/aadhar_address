@@ -14,12 +14,12 @@ class recipt extends StatefulWidget {
 }
 
 class _reciptState extends State<recipt> {
-
   bool error = false;
 
   @override
   Widget build(BuildContext context) {
-    final info = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    final info =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     return new WillPopScope(
       onWillPop: () async => false,
       child: new Scaffold(
@@ -110,7 +110,7 @@ class _reciptState extends State<recipt> {
                             ),
                             Container(
                               child: Text(
-                                'Operator Aadhaar: ${info['op_aadhar']}',
+                                'Operator Aadhaar: xxxxxxxx${info['op_aadhar'].substring(8, 12)}',
                                 style: TextStyle(
                                     fontFamily: 'Open Sans',
                                     fontWeight: FontWeight.bold),
@@ -171,18 +171,21 @@ class _reciptState extends State<recipt> {
                       Container(
                         child: Column(
                           children: [
-                            user_image != null ? Image(
-                              image: FileImage(
-                                user_image,
-                              ),
-                              width: MediaQuery.of(context).size.width / 5,
-                              height: MediaQuery.of(context).size.height / 5,
-                            ) :
-                            Icon(
-                              Icons.downloading_rounded,
-                              color: Color(0xFF143B40),
-                              size: MediaQuery.of(context).size.width / 5,
-                            ),
+                            user_image != null
+                                ? Image(
+                                    image: FileImage(
+                                      user_image,
+                                    ),
+                                    width:
+                                        MediaQuery.of(context).size.width / 5,
+                                    height:
+                                        MediaQuery.of(context).size.height / 5,
+                                  )
+                                : Icon(
+                                    Icons.downloading_rounded,
+                                    color: Color(0xFF143B40),
+                                    size: MediaQuery.of(context).size.width / 5,
+                                  ),
                             Text(
                               'User',
                               style: TextStyle(
@@ -192,18 +195,21 @@ class _reciptState extends State<recipt> {
                             SizedBox(
                               height: 5,
                             ),
-                            operator_image != null ? Image(
-                              image: FileImage(
-                                operator_image,
-                              ),
-                              width: MediaQuery.of(context).size.width / 5,
-                              height: MediaQuery.of(context).size.height / 5,
-                            ) :
-                            Icon(
-                              Icons.downloading_rounded,
-                              color: Color(0xFF143B40),
-                              size: MediaQuery.of(context).size.width / 5,
-                            ),
+                            operator_image != null
+                                ? Image(
+                                    image: FileImage(
+                                      operator_image,
+                                    ),
+                                    width:
+                                        MediaQuery.of(context).size.width / 5,
+                                    height:
+                                        MediaQuery.of(context).size.height / 5,
+                                  )
+                                : Icon(
+                                    Icons.downloading_rounded,
+                                    color: Color(0xFF143B40),
+                                    size: MediaQuery.of(context).size.width / 5,
+                                  ),
                             SizedBox(
                               height: 10,
                             ),
@@ -216,18 +222,21 @@ class _reciptState extends State<recipt> {
                             SizedBox(
                               height: 5,
                             ),
-                            document_image != null ? Image(
-                              image: FileImage(
-                                document_image,
-                              ),
-                              width: MediaQuery.of(context).size.width / 5,
-                              height: MediaQuery.of(context).size.height / 5,
-                            ) :
-                            Icon(
-                              Icons.downloading_rounded,
-                              color: Color(0xFF143B40),
-                              size: MediaQuery.of(context).size.width / 5,
-                            ),
+                            document_image != null
+                                ? Image(
+                                    image: FileImage(
+                                      document_image,
+                                    ),
+                                    width:
+                                        MediaQuery.of(context).size.width / 5,
+                                    height:
+                                        MediaQuery.of(context).size.height / 5,
+                                  )
+                                : Icon(
+                                    Icons.downloading_rounded,
+                                    color: Color(0xFF143B40),
+                                    size: MediaQuery.of(context).size.width / 5,
+                                  ),
                             SizedBox(
                               height: 10,
                             ),
@@ -241,6 +250,9 @@ class _reciptState extends State<recipt> {
                         ),
                       )
                     ],
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   Spacer(),
                   Row(
@@ -256,8 +268,7 @@ class _reciptState extends State<recipt> {
                         height: 40,
                         child: FlatButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, 'scan');
-                            //Delete the current document and start a new one at step 1
+                            //Share Content
                           },
                           child: Text(
                             "Share",
@@ -274,10 +285,10 @@ class _reciptState extends State<recipt> {
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
                         alignment: FractionalOffset.center,
-                        width: MediaQuery.of(context).size.width / 4,
+                        width: MediaQuery.of(context).size.width / 3,
                         height: 40,
                         child: FlatButton(
-                          onPressed: () async{
+                          onPressed: () async {
                             await getFeedback(context);
                           },
                           child: Text(

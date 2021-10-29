@@ -18,10 +18,10 @@ class capture extends StatefulWidget {
 void updateData() {
   var db = FirebaseFirestore.instance;
   DateTime curr = DateTime.now();
-  db.collection("ongoing").doc(userRefId).update({
+  db.collection("ongoing").doc(userRefId).set({
     "step": 4,
     "timestamp": curr,
-  });
+  }, SetOptions(merge: true));
 }
 
 // Pick image from camera

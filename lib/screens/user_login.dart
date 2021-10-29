@@ -267,18 +267,6 @@ class _userLoginState extends State<userLogin> {
                         ),
                       ),
                     ),
-                    // FlatButton(
-                    //   onPressed: () async {
-                    //     Navigator.pushNamed(context, 'opotp');
-                    //   },
-                    //   child: Text(
-                    //     "move to next screen",
-                    //     style: TextStyle(
-                    //       color: Colors.black,
-                    //       fontSize: 20,
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               Text(

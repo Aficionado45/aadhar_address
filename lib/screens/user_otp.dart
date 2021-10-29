@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class userOTP extends StatefulWidget {
   const userOTP({this.aadharno, this.txnid, this.step});
@@ -21,9 +23,9 @@ class _userOTPState extends State<userOTP> {
   String otp;
   bool error = false;
 
-  Widget build(BuildContext context) {
-    // final step = ModalRoute.of(context).settings.arguments;
+  void getData() {}
 
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -151,7 +153,3 @@ class _userOTPState extends State<userOTP> {
     );
   }
 }
-
-//TODO: Improve UI
-//Wrong OTP and resend
-//Auth API integration
