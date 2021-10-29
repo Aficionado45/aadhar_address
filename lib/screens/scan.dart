@@ -52,213 +52,211 @@ class _scanDocState extends State<scanDoc> {
     return new WillPopScope(
       onWillPop: () async => false,
       child: new Scaffold(
-        // appBar: AppBar(
-        //   backgroundColor: Colors.white,
-        //   toolbarHeight: MediaQuery.of(context).size.height / 8,
-        //   elevation: 0,
-        //   leadingWidth: MediaQuery.of(context).size.width / 4,
-        //   leading: Padding(
-        //     padding: const EdgeInsets.all(10.0),
-        //     child: Hero(
-        //       tag: 'logo',
-        //       child: Image(
-        //         image: AssetImage('images/Aadhaar_Logo.svg'),
-        //       ),
-        //     ),
-        //   ),
-        //   actions: [
-        //     IconButton(
-        //       icon: Icon(
-        //         Icons.help_outline_rounded,
-        //         color: Color(0xFF143B40),
-        //         size: 30,
-        //       ),
-        //       onPressed: () {
-        //         getFeedback(context);
-        //       },
-        //     )
-        //   ],
-        // ),
-        // backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          toolbarHeight: MediaQuery.of(context).size.height / 8,
+          elevation: 0,
+          leadingWidth: MediaQuery.of(context).size.width / 4,
+          leading: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Hero(
+              tag: 'logo',
+              child: Image(
+                image: AssetImage('images/Aadhaar_Logo.svg'),
+              ),
+            ),
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.help_outline_rounded,
+                color: Color(0xFF143B40),
+                size: 30,
+              ),
+              onPressed: () {
+                getFeedback(context);
+              },
+            )
+          ],
+        ),
+        backgroundColor: Colors.white,
         body: Container(
           constraints: BoxConstraints.expand(),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Spacer(),
-                Text(
-                  "Scan Documents",
-                  style: TextStyle(fontSize: 25),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Spacer(),
+              Text(
+                "Scan Documents",
+                style: TextStyle(fontSize: 25),
+              ),
+              SizedBox(height: 20),
+              _image == null
+                  ? Text(
+                      'No image selected.',
+                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    )
+                  : Container(
+                      height: 300, width: 300, child: Image.file(_image)),
+              SizedBox(height: 20),
+              if (state == AppState.extracted)
+                Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: TextFormField(
+                    readOnly: true,
+                    controller: script,
+                    minLines: 5,
+                    maxLines: 100,
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                    onChanged: (val) {
+                      setState(() {});
+                    },
+                    decoration: new InputDecoration(
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
+                      ),
+                      //fillColor: Colors.green
+                    ),
+                  ),
                 ),
-                SizedBox(height: 20),
-                _image == null
-                    ? Text(
-                        'No image selected.',
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      )
-                    : Container(
-                        height: 300, width: 300, child: Image.file(_image)),
-                SizedBox(height: 20),
-                if (state == AppState.extracted)
-                  Padding(
+              if (state == AppState.free)
+                Padding(
                     padding: const EdgeInsets.all(32.0),
-                    child: TextFormField(
-                      readOnly: true,
-                      controller: script,
-                      minLines: 5,
-                      maxLines: 100,
-                      style: TextStyle(color: Colors.black, fontSize: 16),
-                      onChanged: (val) {
-                        setState(() {});
-                      },
-                      decoration: new InputDecoration(
-                        border: new OutlineInputBorder(
-                          borderRadius: new BorderRadius.circular(25.0),
-                          borderSide: new BorderSide(),
-                        ),
-                        //fillColor: Colors.green
+                    child: Container(
+                      padding: const EdgeInsets.all(10.0),
+                      height: MediaQuery.of(context).size.height / 2,
+                      width: MediaQuery.of(context).size.width,
+                      child: Card(
+                          color: Colors.grey,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Capture and upload a document",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 30)),
+                                Icon(Icons.camera),
+                              ])),
+                    )),
+              SizedBox(height: 20),
+              SizedBox(height: 10),
+              SizedBox(height: 10),
+              if (state == AppState.free)
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFF143B40),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  alignment: FractionalOffset.center,
+                  width: MediaQuery.of(context).size.width / 3,
+                  height: 40,
+                  child: FlatButton(
+                    onPressed: () {
+                      getImage();
+                    },
+                    child: Text(
+                      "Capture Pic",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
                       ),
                     ),
                   ),
-                if (state == AppState.free)
-                  Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: Container(
-                        padding: const EdgeInsets.all(10.0),
-                        height: MediaQuery.of(context).size.height / 2,
-                        width: MediaQuery.of(context).size.width,
-                        child: Card(
-                            color: Colors.grey,
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("Capture and upload a document",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 30)),
-                                  Icon(Icons.camera),
-                                ])),
-                      )),
-                SizedBox(height: 20),
-                SizedBox(height: 10),
-                SizedBox(height: 10),
-                if (state == AppState.free)
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFF143B40),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    alignment: FractionalOffset.center,
-                    width: MediaQuery.of(context).size.width / 3,
-                    height: 40,
-                    child: FlatButton(
-                      onPressed: () {
-                        getImage();
-                      },
-                      child: Text(
-                        "Capture Pic",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ),
-                if (state == AppState.picked || state == AppState.extracted)
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFF143B40),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    alignment: FractionalOffset.center,
-                    width: MediaQuery.of(context).size.width / 3,
-                    height: 40,
-                    child: FlatButton(
-                      onPressed: () {
-                        cropImage();
-                      },
-                      child: Text(
-                        "Crop Document",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ),
-                if (state == AppState.picked || state == AppState.extracted)
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFF143B40),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    alignment: FractionalOffset.center,
-                    width: MediaQuery.of(context).size.width / 3,
-                    height: 40,
-                    child: FlatButton(
-                      onPressed: () {
-                        setState(() {
-                          state = AppState.cropped;
-                        });
-                        getText();
-                      },
-                      child: Text(
-                        "Extract address",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ),
-                if (state == AppState.extracted)
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFF143B40),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    alignment: FractionalOffset.center,
-                    width: MediaQuery.of(context).size.width / 3,
-                    height: 80,
-                    child: FlatButton(
-                      onPressed: () async {
-                        //Line is commented out for testing
-                        await uploadImage(
-                            _initialImage, '$userRefId/document.png');
-                        updateData();
-                        Navigator.push(
-                          context,
-                          //AS A PARAMTER SEND UR ADDRESS for testing, ELSE we will have to send the extracted address i.e script.text
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                cnfrmAddress(address: script.text),
-                          ),
-                        );
-                        // "34AROY M.C LAHIRI STREET ganesh apart ment, Chatra, Serampore, West Bengal 712204, India",
-                      },
-                      child: Text(
-                        "Confirm Address and Proceed",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ),
-                Spacer(),
-                Text(
-                  'Invalid OTP',
-                  style: TextStyle(
-                      color: error ? Colors.red : Colors.white,
-                      fontFamily: 'Open Sans',
-                      fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 12,
-                )
-              ],
-            ),
+              if (state == AppState.picked || state == AppState.extracted)
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFF143B40),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  alignment: FractionalOffset.center,
+                  width: MediaQuery.of(context).size.width / 3,
+                  height: 40,
+                  child: FlatButton(
+                    onPressed: () {
+                      cropImage();
+                    },
+                    child: Text(
+                      "Crop Document",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
+              if (state == AppState.picked || state == AppState.extracted)
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFF143B40),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  alignment: FractionalOffset.center,
+                  width: MediaQuery.of(context).size.width / 3,
+                  height: 40,
+                  child: FlatButton(
+                    onPressed: () {
+                      setState(() {
+                        state = AppState.cropped;
+                      });
+                      getText();
+                    },
+                    child: Text(
+                      "Extract address",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
+              if (state == AppState.extracted)
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFF143B40),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  alignment: FractionalOffset.center,
+                  width: MediaQuery.of(context).size.width / 3,
+                  height: 80,
+                  child: FlatButton(
+                    onPressed: () async {
+                      //Line is commented out for testing
+                      await uploadImage(
+                          _initialImage, '$userRefId/document.png');
+                      updateData();
+                      Navigator.push(
+                        context,
+                        //AS A PARAMTER SEND UR ADDRESS for testing, ELSE we will have to send the extracted address i.e script.text
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              cnfrmAddress(address: script.text),
+                        ),
+                      );
+                      // "34AROY M.C LAHIRI STREET ganesh apart ment, Chatra, Serampore, West Bengal 712204, India",
+                    },
+                    child: Text(
+                      "Confirm Address and Proceed",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
+              Spacer(),
+              Text(
+                'Invalid OTP',
+                style: TextStyle(
+                    color: error ? Colors.red : Colors.white,
+                    fontFamily: 'Open Sans',
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 12,
+              )
+            ],
           ),
         ),
       ),
