@@ -68,7 +68,9 @@ class _opLoginState extends State<opLogin> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Spacer(),
+                SizedBox(
+                  height: 60,
+                ),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -92,8 +94,8 @@ class _opLoginState extends State<opLogin> {
                       }
                     },
                     decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 20.0),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(32.0)),
                       ),
@@ -127,7 +129,9 @@ class _opLoginState extends State<opLogin> {
                   child: FlatButton(
                     onPressed: () async {
                       bool exists = true; //await checkIfDocExists(op_aadhar);
-                      if (op_aadhar != null && op_aadhar.length == 12 && exists) {
+                      if (op_aadhar != null &&
+                          op_aadhar.length == 12 &&
+                          exists) {
                         print('Conditions are true.');
                         setState(() {
                           isAsync = true;
@@ -261,7 +265,8 @@ class _opLoginState extends State<opLogin> {
                             "Verify Captcha",
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: MediaQuery.of(context).size.width / 35,
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 35,
                                 fontFamily: 'Open Sans',
                                 fontWeight: FontWeight.bold),
                           ),
@@ -269,7 +274,6 @@ class _opLoginState extends State<opLogin> {
                       ),
                     ],
                   ),
-                Spacer(),
                 Text(
                   'Please enter a valid 12 digit Aadhaar Number',
                   style: TextStyle(
