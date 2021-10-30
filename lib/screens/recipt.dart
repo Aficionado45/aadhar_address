@@ -337,7 +337,7 @@ class _reciptState extends State<recipt> {
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
-                      height: 30,
+                      height: MediaQuery.of(context).size.height / 12,
                     )
                   ],
                 ),

@@ -508,7 +508,7 @@ class _confirmState extends State<confirm> {
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
-                      height: 30,
+                      height: MediaQuery.of(context).size.height / 12,
                     )
                   ],
                 ),
