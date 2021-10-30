@@ -211,6 +211,16 @@ class _cnfrmAddressState extends State<cnfrmAddress> {
                         "Location verified using GPS. Now you can confirm the address and proceed",
                         textAlign: TextAlign.center,
                       ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 4,
+                    ),
+                    Image(
+                      image: AssetImage('images/Progress2.png'),
+                      width: MediaQuery.of(context).size.width * 0.67,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 12,
+                    )
                   ],
                 ),
               ),

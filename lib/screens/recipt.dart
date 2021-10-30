@@ -336,6 +336,10 @@ class _reciptState extends State<recipt> {
                           fontFamily: 'Open Sans',
                           fontWeight: FontWeight.bold),
                     ),
+                    Image(
+                      image: AssetImage('images/Progress5.png'),
+                      width: MediaQuery.of(context).size.width * 0.67,
+                    ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height / 12,
                     )

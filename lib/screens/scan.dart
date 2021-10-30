@@ -81,7 +81,8 @@ class _scanDocState extends State<scanDoc> {
         body: ModalProgressHUD(
           inAsyncCall: isAsync,
           child: ListView(
-            padding: EdgeInsets.all(20),
+            shrinkWrap: true,
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: MediaQuery.of(context).size.width / 6),
             children: [
               Spacer(),
               Center(
@@ -126,7 +127,7 @@ class _scanDocState extends State<scanDoc> {
                 ),
               if (state == AppState.free)
                 Padding(
-                    padding: const EdgeInsets.all(32.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Container(
                       padding: const EdgeInsets.all(10.0),
                       height: MediaQuery.of(context).size.height / 3,
@@ -323,6 +324,10 @@ class _scanDocState extends State<scanDoc> {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
+              ),
+              Image(
+                image: AssetImage('images/Progress1.png'),
+                width: MediaQuery.of(context).size.width * 0.67,
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height / 12,

@@ -171,6 +171,10 @@ class _userOTPState extends State<userOTP> {
                     fontFamily: 'Open Sans',
                     fontWeight: FontWeight.bold),
               ),
+              Image(
+                image: AssetImage('images/Progress0.png'),
+                width: MediaQuery.of(context).size.width * 0.67,
+              ),
               SizedBox(
                 height: MediaQuery.of(context).size.height / 12,
               )
