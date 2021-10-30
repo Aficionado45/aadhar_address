@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class capture extends StatefulWidget {
   const capture();
@@ -56,6 +57,7 @@ class _captureState extends State<capture> {
   bool userUploaded = false;
   bool operatorUploaded = false;
   bool error = false;
+  bool isAsync = false;
 
   @override
   Widget build(BuildContext context) {
@@ -90,201 +92,220 @@ class _captureState extends State<capture> {
           ],
         ),
         backgroundColor: Colors.white,
-        body: Container(
-          constraints: BoxConstraints.expand(),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Spacer(),
-              Text(
-                "Capture User and Operator Images",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    fontFamily: 'Open Sans'),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      userUploaded
-                          ? Container(
-                              width: MediaQuery.of(context).size.width / 3,
-                              height: MediaQuery.of(context).size.height / 4,
-                              child: Image(
-                                image: FileImage(
-                                  userImage,
+        body: ModalProgressHUD(
+          inAsyncCall: isAsync,
+          child: Container(
+            constraints: BoxConstraints.expand(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Spacer(),
+                Text(
+                  "Capture User and Operator Images",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      fontFamily: 'Open Sans'),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        userUploaded
+                            ? Container(
+                                width: MediaQuery.of(context).size.width / 3,
+                                height: MediaQuery.of(context).size.height / 4,
+                                child: Image(
+                                  image: FileImage(
+                                    userImage,
+                                  ),
                                 ),
+                              )
+                            : Icon(
+                                Icons.person_outline_rounded,
+                                size: MediaQuery.of(context).size.height / 6,
                               ),
-                            )
-                          : Icon(
-                              Icons.person_outline_rounded,
-                              size: MediaQuery.of(context).size.height / 6,
-                            ),
-                      Text(
-                        'User',
-                        style: TextStyle(
-                            fontFamily: 'Open Sans',
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      Container(
-                        child: IconButton(
-                          onPressed: () async {
-                            final PickedFile newImage =
-                                await pickImageFromCamera(context);
-                            setState(() {
-                              if (newImage != null) {
-                                userImage = File(newImage.path);
-                                userUploaded = true;
-                              }
-                            });
-                          },
-                          icon: Icon(
-                            Icons.camera_alt_rounded,
-                            color: Color(0xFF143B40),
-                          ),
-                          iconSize: MediaQuery.of(context).size.height / 16,
+                        Text(
+                          'User',
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold),
                         ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      operatorUploaded
-                          ? Container(
-                              width: MediaQuery.of(context).size.width / 3,
-                              height: MediaQuery.of(context).size.height / 4,
-                              child: Image(
-                                image: FileImage(
-                                  operatorImage,
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Container(
+                          child: IconButton(
+                            onPressed: () async {
+                              setState(() {
+                                isAsync = true;
+                              });
+                              final PickedFile newImage =
+                                  await pickImageFromCamera(context);
+                              setState(() {
+                                if (newImage != null) {
+                                  userImage = File(newImage.path);
+                                  userUploaded = true;
+                                }
+                                isAsync = false;
+                              });
+                            },
+                            icon: Icon(
+                              Icons.camera_alt_rounded,
+                              color: Color(0xFF143B40),
+                            ),
+                            iconSize: MediaQuery.of(context).size.height / 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        operatorUploaded
+                            ? Container(
+                                width: MediaQuery.of(context).size.width / 3,
+                                height: MediaQuery.of(context).size.height / 4,
+                                child: Image(
+                                  image: FileImage(
+                                    operatorImage,
+                                  ),
                                 ),
+                              )
+                            : Icon(
+                                Icons.person_outline_rounded,
+                                size: MediaQuery.of(context).size.height / 6,
                               ),
-                            )
-                          : Icon(
-                              Icons.person_outline_rounded,
-                              size: MediaQuery.of(context).size.height / 6,
+                        Text(
+                          'Operator',
+                          style: TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Container(
+                          child: IconButton(
+                            onPressed: () async {
+                              setState(() {
+                                isAsync = true;
+                              });
+                              final PickedFile newImage =
+                                  await pickImageFromCamera(context);
+                              setState(() {
+                                if (newImage != null) {
+                                  operatorImage = File(newImage.path);
+                                  operatorUploaded = true;
+                                }
+                                isAsync = false;
+                              });
+                            },
+                            icon: Icon(
+                              Icons.camera_alt_rounded,
+                              color: Color(0xFF143B40),
                             ),
-                      Text(
-                        'Operator',
-                        style: TextStyle(
-                            fontFamily: 'Open Sans',
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      Container(
-                        child: IconButton(
-                          onPressed: () async {
-                            final PickedFile newImage =
-                                await pickImageFromCamera(context);
-                            setState(() {
-                              if (newImage != null) {
-                                operatorImage = File(newImage.path);
-                                operatorUploaded = true;
-                              }
-                            });
-                          },
-                          icon: Icon(
-                            Icons.camera_alt_rounded,
-                            color: Color(0xFF143B40),
+                            iconSize: MediaQuery.of(context).size.height / 16,
                           ),
-                          iconSize: MediaQuery.of(context).size.height / 16,
                         ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xFF143B40),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
                       ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFF143B40),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    alignment: FractionalOffset.center,
-                    width: MediaQuery.of(context).size.width / 4,
-                    height: 40,
-                    child: FlatButton(
-                      onPressed: () async {
-                        setState(() {
-                          error = false;
-                        });
-                        Navigator.pushReplacementNamed(context, 'confirmation');
-                      },
-                      child: Text(
-                        "Reset",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFF143B40),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    alignment: FractionalOffset.center,
-                    width: MediaQuery.of(context).size.width / 4,
-                    height: 40,
-                    child: FlatButton(
-                      onPressed: () async {
-                        if (userUploaded && operatorUploaded) {
+                      alignment: FractionalOffset.center,
+                      width: MediaQuery.of(context).size.width / 4,
+                      height: 40,
+                      child: FlatButton(
+                        onPressed: () async {
                           setState(() {
                             error = false;
+                            isAsync = false;
                           });
-
-                          await uploadImage(userImage, '$userRefId/user.png');
-
-                          await uploadImage(
-                              operatorImage, '$userRefId/operator.png');
-                          Navigator.pushNamed(context, "confirm");
-                        } else {
-                          setState(() {
-                            error = true;
-                          });
-                        }
-                      },
-                      child: Text(
-                        "Next",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
+                          Navigator.pushReplacementNamed(context, 'confirmation');
+                        },
+                        child: Text(
+                          "Reset",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              Spacer(),
-              Text(
-                'Please capture both images',
-                style: TextStyle(
-                    color: error ? Colors.red : Colors.white,
-                    fontFamily: 'Open Sans',
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 12,
-              )
-            ],
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xFF143B40),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                      alignment: FractionalOffset.center,
+                      width: MediaQuery.of(context).size.width / 4,
+                      height: 40,
+                      child: FlatButton(
+                        onPressed: () async {
+                          setState(() {
+                            isAsync = true;
+                          });
+                          if (userUploaded && operatorUploaded) {
+                            setState(() {
+                              error = false;
+                            });
+
+                            await uploadImage(userImage, '$userRefId/user.png');
+
+                            await uploadImage(
+                                operatorImage, '$userRefId/operator.png');
+                            setState(() {
+                              isAsync = false;
+                            });
+                            Navigator.pushNamed(context, "confirm");
+                          } else {
+                            setState(() {
+                              error = true;
+                              isAsync = false;
+                            });
+                          }
+                        },
+                        child: Text(
+                          "Next",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Spacer(),
+                Text(
+                  'Please capture both images',
+                  style: TextStyle(
+                      color: error ? Colors.red : Colors.white,
+                      fontFamily: 'Open Sans',
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 12,
+                )
+              ],
+            ),
           ),
         ),
       ),

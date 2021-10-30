@@ -10,6 +10,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 enum AppState { free, picked, cropped, extracted }
 
@@ -26,6 +27,7 @@ class _scanDocState extends State<scanDoc> {
   AppState state;
   File _image;
   bool error = false;
+  bool isAsync = false;
 
   //Initial image contains the initial file
   File _initialImage;
@@ -76,169 +78,123 @@ class _scanDocState extends State<scanDoc> {
           ],
         ),
         backgroundColor: Colors.white,
-        body: ListView(
-          padding: EdgeInsets.all(20),
-          children: [
-            Spacer(),
-            Center(
-              child: Text(
-                "Scan Documents",
-                style: TextStyle(fontSize: 25),
-              ),
-            ),
-            if (state != AppState.free)
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 30,
-              ),
-            _image == null
-                ? Text(
-                    'No image selected.',
-                    style: TextStyle(fontSize: 20, color: Colors.white),
-                  )
-                : Container(
-                    height: MediaQuery.of(context).size.height / 3,
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: Image.file(_image)),
-            if (state == AppState.extracted)
-              Padding(
-                padding: const EdgeInsets.all(32.0),
-                child: TextFormField(
-                  readOnly: true,
-                  controller: script,
-                  minLines: 5,
-                  maxLines: 100,
-                  style: TextStyle(color: Colors.black, fontSize: 16),
-                  onChanged: (val) {
-                    setState(() {});
-                  },
-                  decoration: new InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    //fillColor: Colors.green
-                  ),
+        body: ModalProgressHUD(
+          inAsyncCall: isAsync,
+          child: ListView(
+            padding: EdgeInsets.all(20),
+            children: [
+              Spacer(),
+              Center(
+                child: Text(
+                  "Scan Documents",
+                  style: TextStyle(fontSize: 25),
                 ),
               ),
-            if (state == AppState.free)
-              Padding(
+              if (state != AppState.free)
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 30,
+                ),
+              _image == null
+                  ? Text(
+                      'No image selected.',
+                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    )
+                  : Container(
+                      height: MediaQuery.of(context).size.height / 3,
+                      width: MediaQuery.of(context).size.width / 2,
+                      child: Image.file(_image)),
+              if (state == AppState.extracted)
+                Padding(
                   padding: const EdgeInsets.all(32.0),
-                  child: Container(
-                    padding: const EdgeInsets.all(10.0),
-                    height: MediaQuery.of(context).size.height / 3,
-                    width: MediaQuery.of(context).size.width,
-                    child: Card(
-                        color: Colors.grey,
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("Capture and upload a document",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 30)),
-                              Icon(Icons.camera),
-                            ])),
-                  )),
-            if (state == AppState.free)
+                  child: TextFormField(
+                    readOnly: true,
+                    controller: script,
+                    minLines: 5,
+                    maxLines: 100,
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                    onChanged: (val) {
+                      setState(() {});
+                    },
+                    decoration: new InputDecoration(
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
+                      ),
+                      //fillColor: Colors.green
+                    ),
+                  ),
+                ),
+              if (state == AppState.free)
+                Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(10.0),
+                      height: MediaQuery.of(context).size.height / 3,
+                      width: MediaQuery.of(context).size.width,
+                      child: Card(
+                          color: Colors.grey,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Capture and upload a document",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 30)),
+                                Icon(Icons.camera),
+                              ])),
+                    )),
+              if (state == AppState.free)
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFF143B40),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  alignment: FractionalOffset.center,
+                  width: MediaQuery.of(context).size.width / 3,
+                  height: 40,
+                  child: FlatButton(
+                    onPressed: () async{
+                      setState(() {
+                        isAsync = true;
+                      });
+                      await getImage();
+                      setState(() {
+                        isAsync = false;
+                      });
+                    },
+                    child: Text(
+                      "Capture Pic",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
+              SizedBox(
+                height: 10,
+              ),
+              if (state == AppState.picked || state == AppState.extracted)
+                SizedBox(
+                  height: 20,
+                ),
               Container(
                 decoration: BoxDecoration(
                   color: Color(0xFF143B40),
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
                 alignment: FractionalOffset.center,
-                width: MediaQuery.of(context).size.width / 3,
+                width: MediaQuery.of(context).size.width / 5,
                 height: 40,
                 child: FlatButton(
                   onPressed: () {
-                    getImage();
-                  },
-                  child: Text(
-                    "Capture Pic",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-              ),
-            SizedBox(
-              height: 10,
-            ),
-            if (state == AppState.picked || state == AppState.extracted)
-              SizedBox(
-                height: 20,
-              ),
-            Container(
-              decoration: BoxDecoration(
-                color: Color(0xFF143B40),
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              ),
-              alignment: FractionalOffset.center,
-              width: MediaQuery.of(context).size.width / 5,
-              height: 40,
-              child: FlatButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, 'scan');
-                },
-                child: Text(
-                  "Capture Again",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: Color(0xFF143B40),
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              ),
-              alignment: FractionalOffset.center,
-              width: MediaQuery.of(context).size.width / 5,
-              height: 40,
-              child: FlatButton(
-                onPressed: () {
-                  cropImage();
-                },
-                child: Text(
-                  "Crop Document",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            if (state == AppState.picked || state == AppState.extracted)
-              Container(
-                decoration: BoxDecoration(
-                  color: Color(0xFF143B40),
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                alignment: FractionalOffset.center,
-                width: MediaQuery.of(context).size.width / 3,
-                height: 40,
-                child: FlatButton(
-                  onPressed: () async {
                     setState(() {
-                      state = AppState.cropped;
+                      isAsync = false;
                     });
-                    await getText();
-
-                    if (script.text.length == 0)
-                      setState(() {
-                        error = true;
-                      });
+                    Navigator.pushNamed(context, 'scan');
                   },
                   child: Text(
-                    "Extract address",
+                    "Capture Again",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 15,
@@ -246,35 +202,29 @@ class _scanDocState extends State<scanDoc> {
                   ),
                 ),
               ),
-            SizedBox(
-              height: 10,
-            ),
-            if (state == AppState.extracted)
+              SizedBox(
+                height: 10,
+              ),
               Container(
                 decoration: BoxDecoration(
                   color: Color(0xFF143B40),
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
                 alignment: FractionalOffset.center,
-                width: MediaQuery.of(context).size.width / 3,
+                width: MediaQuery.of(context).size.width / 5,
                 height: 40,
                 child: FlatButton(
-                  onPressed: () async {
-                    //Line is commented out for testing
-                    await uploadImage(_initialImage, '$userRefId/document.png');
-                    updateData();
-                    Navigator.push(
-                      context,
-                      //AS A PARAMTER SEND UR ADDRESS for testing, ELSE we will have to send the extracted address i.e script.text
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            cnfrmAddress(address: script.text),
-                      ),
-                    );
-                    // "34AROY M.C LAHIRI STREET ganesh apart ment, Chatra, Serampore, West Bengal 712204, India",
+                  onPressed: () async{
+                    setState(() {
+                      isAsync = true;
+                    });
+                    await cropImage();
+                    setState(() {
+                      isAsync = false;
+                    });
                   },
                   child: Text(
-                    "Confirm Address and Proceed",
+                    "Crop Document",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 15,
@@ -282,23 +232,103 @@ class _scanDocState extends State<scanDoc> {
                   ),
                 ),
               ),
-            Spacer(),
-            Center(
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Text(
-                  'No Address Found, Scan Again!',
-                  style: TextStyle(
-                      color: error ? Colors.red : Colors.white,
-                      fontFamily: 'Open Sans',
-                      fontWeight: FontWeight.bold),
+              SizedBox(
+                height: 10,
+              ),
+              if (state == AppState.picked || state == AppState.extracted)
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFF143B40),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  alignment: FractionalOffset.center,
+                  width: MediaQuery.of(context).size.width / 3,
+                  height: 40,
+                  child: FlatButton(
+                    onPressed: () async {
+                      setState(() {
+                        state = AppState.cropped;
+                        isAsync = true;
+                      });
+                      await getText();
+                      setState(() {
+                        isAsync = false;
+                      });
+
+                      if (script.text.length == 0)
+                        setState(() {
+                          error = true;
+                        });
+                    },
+                    child: Text(
+                      "Extract address",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
+              SizedBox(
+                height: 10,
+              ),
+              if (state == AppState.extracted)
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFF143B40),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  alignment: FractionalOffset.center,
+                  width: MediaQuery.of(context).size.width / 3,
+                  height: 40,
+                  child: FlatButton(
+                    onPressed: () async {
+                      setState(() {
+                        isAsync = true;
+                      });
+                      //Line is commented out for testing
+                      await uploadImage(_initialImage, '$userRefId/document.png');
+                      updateData();
+                      setState(() {
+                        isAsync = false;
+                      });
+                      Navigator.push(
+                        context,
+                        //AS A PARAMTER SEND UR ADDRESS for testing, ELSE we will have to send the extracted address i.e script.text
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              cnfrmAddress(address: script.text),
+                        ),
+                      );
+                      // "34AROY M.C LAHIRI STREET ganesh apart ment, Chatra, Serampore, West Bengal 712204, India",
+                    },
+                    child: Text(
+                      "Confirm Address and Proceed",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
+              Spacer(),
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    'No Address Found, Scan Again!',
+                    style: TextStyle(
+                        color: error ? Colors.red : Colors.white,
+                        fontFamily: 'Open Sans',
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 12,
-            )
-          ],
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 12,
+              )
+            ],
+          ),
         ),
       ),
     );
