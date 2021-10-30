@@ -301,7 +301,7 @@ class _userLoginState extends State<userLogin> {
                   width: MediaQuery.of(context).size.width * 0.67,
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height / 12,
+                  height: 15
                 )
               ],
             ),
