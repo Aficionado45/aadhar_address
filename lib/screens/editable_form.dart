@@ -268,7 +268,7 @@ class _editFormState extends State<editForm> {
                         textAlign: TextAlign.center,
                       ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height / 8,
+                      height: MediaQuery.of(context).size.height / 4.5,
                     ),
                     Image(
                       image: AssetImage('images/Progress2.png'),

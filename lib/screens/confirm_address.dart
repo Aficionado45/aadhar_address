@@ -212,7 +212,7 @@ class _cnfrmAddressState extends State<cnfrmAddress> {
                         textAlign: TextAlign.center,
                       ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height / 4,
+                      height: MediaQuery.of(context).size.height / 3.5,
                     ),
                     Image(
                       image: AssetImage('images/Progress2.png'),

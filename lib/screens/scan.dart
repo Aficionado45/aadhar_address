@@ -84,7 +84,6 @@ class _scanDocState extends State<scanDoc> {
             shrinkWrap: true,
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: MediaQuery.of(context).size.width / 6),
             children: [
-              Spacer(),
               Center(
                 child: Text(
                   "Scan Documents",
@@ -312,7 +311,6 @@ class _scanDocState extends State<scanDoc> {
                     ),
                   ),
                 ),
-              Spacer(),
               Center(
                 child: Padding(
                   padding: EdgeInsets.all(10),
@@ -330,7 +328,7 @@ class _scanDocState extends State<scanDoc> {
                 width: MediaQuery.of(context).size.width * 0.67,
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height / 12,
+                height: 15
               )
             ],
           ),
