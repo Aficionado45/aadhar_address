@@ -296,6 +296,9 @@ class _userLoginState extends State<userLogin> {
                         fontFamily: 'Open Sans',
                         fontWeight: FontWeight.bold),
                   ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 12,
+                )
               ],
             ),
           ),
