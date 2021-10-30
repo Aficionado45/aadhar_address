@@ -20,6 +20,10 @@ Future<void> getFeedback(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) => AlertDialog(
+      elevation: 15,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
       title: Text(
         'Raise a Suggestion',
         style: TextStyle(

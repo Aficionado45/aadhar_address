@@ -507,6 +507,13 @@ class _confirmState extends State<confirm> {
                           fontFamily: 'Open Sans',
                           fontWeight: FontWeight.bold),
                     ),
+                    Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 6),
+                      child: Image(
+                        image: AssetImage('images/Progress4.png'),
+                        // width: MediaQuery.of(context).size.width * 0.67,
+                      ),
+                    ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height / 12,
                     )
